@@ -116,7 +116,7 @@ export default function Home() {
                 <ArrowRight className="ml-2 w-6 h-6" />
               </Button>
               <p className="text-brand-pink font-bold text-sm">
-                ＼ 30名限定・残席わずか ／
+                ＼ 30名限定・埋まり次第終了／
               </p>
             </div>
 
