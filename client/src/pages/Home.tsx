@@ -566,7 +566,7 @@ export default function Home() {
               <div className="h-full min-h-[300px] bg-slate-100 rounded-xl overflow-hidden relative">
                 {/* Map Placeholder */}
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3205.678912345678!2d138.2345678!3d36.3456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzY!5e0!3m2!1sja!2sjp!4v1610000000000!5m2!1sja!2sjp" 
+                  src="https://maps.google.com/maps?q=%2B519worklodge%20%E9%95%B7%E9%87%8E%E7%9C%8C%E4%B8%8A%E7%94%B0%E5%B8%82%E4%B8%8B%E4%B9%8B%E9%83%B7812-10&t=&z=15&ie=UTF8&iwloc=&output=embed" 
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
