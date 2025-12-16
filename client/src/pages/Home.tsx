@@ -639,7 +639,7 @@ export default function Home() {
                 <Button 
                   size="lg" 
                   className="w-full md:w-auto bg-brand-yellow hover:bg-yellow-400 text-slate-900 font-bold text-xl px-16 py-8 rounded-full shadow-xl transition-transform hover:scale-105"
-                  onClick={() => window.open("https://peatix.com", "_blank")}
+                  onClick={() => window.open("https://ueda-ai-katsuyou.peatix.com/view", "_blank")}
                 >
                   Peatixで席を確保する
                   <ArrowRight className="ml-2 w-6 h-6" />
