@@ -437,10 +437,11 @@ export default function Home() {
               <div className="flex flex-col md:flex-row gap-10 items-center">
                 <div className="w-full md:w-1/3">
                   <div className="aspect-square rounded-2xl overflow-hidden shadow-lg bg-slate-200">
-                    {/* Placeholder for instructor image */}
-                    <div className="w-full h-full flex items-center justify-center bg-slate-300 text-slate-500">
-                      講師写真
-                    </div>
+                    <img 
+                      src="/images/instructor.png" 
+                      alt="森角 太一" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
                 <div className="w-full md:w-2/3">
@@ -741,7 +742,7 @@ export default function Home() {
           <div className="font-heading font-bold text-xl text-white mb-4">
             信州ミライデザインLAB.
           </div>
-          <p>協力：Core AI Academy</p>
+          
           <p>お問い合わせ：shinsyu.mirai.design@gmail.com / 090-1828-7103</p>
           <div className="pt-8 border-t border-slate-800 mt-8">
             &copy; 2025 Shinshu Mirai Design LAB. All rights reserved.
