@@ -457,12 +457,12 @@ export default function Home() {
                       <p className="font-bold text-lg">4,000人以上</p>
                     </div>
                     <div className="bg-white p-3 rounded-lg shadow-sm">
-                      <p className="text-xs text-slate-500">AI導入支援</p>
-                      <p className="font-bold text-lg">県内企業15社</p>
+                      <p className="text-xs text-slate-500">AI導入支援/研修</p>
+                      <p className="font-bold text-lg">県内６団体以上</p>
                     </div>
                     <div className="bg-white p-3 rounded-lg shadow-sm">
-                      <p className="text-xs text-slate-500">最大プロジェクト</p>
-                      <p className="font-bold text-lg">40万円案件</p>
+                      <p className="text-xs text-slate-500">平均業務効率化率</p>
+                      <p className="font-bold text-lg">83%以上</p>
                     </div>
                     <div className="bg-white p-3 rounded-lg shadow-sm">
                       <p className="text-xs text-slate-500">セミナー満足度</p>
