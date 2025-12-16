@@ -13,7 +13,7 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const targetDate = new Date("2025-01-24T10:00:00");
+    const targetDate = new Date("2026-01-24T10:00:00");
     
     const interval = setInterval(() => {
       const now = new Date();
@@ -75,7 +75,7 @@ export default function Home() {
 
           <div className="container relative z-10 mx-auto px-4 py-12 text-center">
             <div className="inline-block mb-6 px-4 py-1 bg-white/80 backdrop-blur rounded-full border border-brand-pink/30 text-brand-pink font-bold text-sm shadow-sm animate-bounce">
-              ＼ 2025年1月24日(土) 開催 ／
+              ＼ 2026年1月24日(土) 開催 ／
             </div>
             
             <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
@@ -537,7 +537,7 @@ export default function Home() {
                   <tbody>
                     <tr className="border-b border-slate-100">
                       <th className="py-4 font-bold text-slate-500 w-24">日時</th>
-                      <td className="py-4 font-medium">2025年1月24日(土) 10:00-12:30</td>
+                      <td className="py-4 font-medium">2026年1月24日(土) 10:00-12:30</td>
                     </tr>
                     <tr className="border-b border-slate-100">
                       <th className="py-4 font-bold text-slate-500">会場</th>
@@ -613,19 +613,15 @@ export default function Home() {
             </div>
 
             <div className="bg-white text-slate-900 max-w-4xl mx-auto rounded-3xl p-8 md:p-12 shadow-2xl">
-              <div className="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-100 pb-8">
-                <div className="text-left">
-                  <p className="text-slate-500 font-bold mb-1">現在の状況</p>
-                  <p className="text-2xl font-bold flex items-center gap-2">
-                    残席：<span className="text-red-500 text-4xl font-heading">△△</span> / 30名
-                  </p>
-                </div>
-                <div className="mt-4 md:mt-0 text-left md:text-right">
-                  <div className="flex items-center gap-2 text-sm font-bold text-slate-600 mb-1">
-                    <ShieldCheck className="w-4 h-4 text-green-500" /> 前回開催は3日で満席
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-bold text-slate-600">
-                    <Clock className="w-4 h-4 text-orange-500" /> 次回開催は未定
+              <div className="flex flex-col md:flex-row justify-center items-center mb-8 border-b border-slate-100 pb-8">
+                <div className="text-center">
+                  <div className="flex items-center gap-4 text-sm font-bold text-slate-600">
+                    <div className="flex items-center gap-1">
+                      <ShieldCheck className="w-4 h-4 text-green-500" /> 前回開催は3日で満席
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-4 h-4 text-orange-500" /> 次回開催は未定
+                    </div>
                   </div>
                 </div>
               </div>
@@ -745,7 +741,7 @@ export default function Home() {
           
           <p>お問い合わせ：shinsyu.mirai.design@gmail.com / 090-1828-7103</p>
           <div className="pt-8 border-t border-slate-800 mt-8">
-            &copy; 2025 Shinshu Mirai Design LAB. All rights reserved.
+            &copy; 2026 Shinshu Mirai Design LAB. All rights reserved.
           </div>
         </div>
       </footer>
