@@ -449,8 +449,8 @@ export default function Home() {
                 <div className="w-full text-left">
                   <h2 className="text-sm font-bold text-brand-blue mb-2">講師紹介</h2>
                   <h3 className="text-3xl font-heading font-bold mb-2">森角 太一</h3>
-                  <p className="text-slate-600 font-medium mb-6">
-                    信州ミライデザインLAB. 代表 　　　　 元教員 | AIコンサルタント
+                  <p className="text-slate-600 font-medium mb-6 whitespace-pre-line">
+                    信州ミライデザインLAB. 代表{"\n"}　　 元教員 | AIコンサルタント
                   </p>
                 </div>
                 
