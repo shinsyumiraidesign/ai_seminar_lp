@@ -741,7 +741,7 @@ export default function Home() {
           
           <p>お問い合わせ：shinsyu.mirai.design@gmail.com / 090-1828-7103</p>
           <div className="pt-8 border-t border-slate-800 mt-8">
-            &copy; 2026 Shinshu Mirai Design LAB. All rights reserved.
+            &copy; 2025 信州ミライデザインLAB. All rights reserved.
           </div>
         </div>
       </footer>
