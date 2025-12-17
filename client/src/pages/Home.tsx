@@ -172,7 +172,6 @@ export default function Home() {
                     "思い通りのものが作れない...",
                     "同僚は効率化してるのに自分は...",
                     "DifyやMakeって何??",
-                    "YouTubeや本で勉強したが、実務への応用方法が見えない",
                     "このままだと取り残されそうで不安"
                   ].map((item, index) => (
                     <div key={index} className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-brand-pink/30 transition-colors">
@@ -186,6 +185,7 @@ export default function Home() {
               </div>
 
               <div className="mt-16 text-center bg-slate-900 text-white p-8 rounded-2xl shadow-xl">
+                <p className="text-sm md:text-base font-bold mb-2 text-slate-300">そんなあなたを救う</p>
                 <p className="text-lg md:text-xl font-bold mb-2">もし3つ以上当てはまるなら...</p>
                 <p className="text-2xl md:text-3xl font-heading text-brand-yellow">
                   あなたは「AIを使えているフリ」<br className="md:hidden" />をしているだけかもしれません
@@ -199,9 +199,9 @@ export default function Home() {
         <section className="py-20 bg-slate-50 relative">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
-                たった2.5時間で、<br />
-                月曜日からの仕事が激変する
+              <h2 className="font-heading text-4xl md:text-6xl font-extrabold mb-4 text-brand-blue leading-tight">
+                月曜日からの仕事が激変する<br />
+                <span className="text-brand-pink">2.5時間！！！</span>
               </h2>
               <p className="text-slate-600">本セミナーが約束する3つの価値</p>
             </div>
@@ -445,8 +445,16 @@ export default function Home() {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto bg-slate-50 rounded-3xl p-8 md:p-12 shadow-inner">
-              <div className="flex flex-col md:flex-row gap-10 items-center">
-                <div className="w-full md:w-1/3">
+              <div className="flex flex-col gap-6 items-center">
+                <div className="w-full text-center">
+                  <h2 className="text-sm font-bold text-brand-blue mb-2">講師紹介</h2>
+                  <h3 className="text-3xl font-heading font-bold mb-2">森角 太一</h3>
+                  <p className="text-slate-600 font-medium mb-6">
+                    信州ミライデザインLAB. 代表 / 元教員AIコンサルタント
+                  </p>
+                </div>
+                
+                <div className="w-full md:w-1/2 mx-auto">
                   <div className="aspect-square rounded-2xl overflow-hidden shadow-lg bg-slate-200">
                     <img 
                       src="/images/instructor.png" 
@@ -455,13 +463,8 @@ export default function Home() {
                     />
                   </div>
                 </div>
+
                 <div className="w-full md:w-2/3">
-                  <h2 className="text-sm font-bold text-brand-blue mb-2">講師紹介</h2>
-                  <h3 className="text-3xl font-heading font-bold mb-2">森角 太一</h3>
-                  <p className="text-slate-600 font-medium mb-6">
-                    信州ミライデザインLAB. 代表 / 元教員AIコンサルタント
-                  </p>
-                  
                   <div className="grid grid-cols-2 gap-4 mb-8">
                     <div className="bg-white p-3 rounded-lg shadow-sm">
                       <p className="text-xs text-slate-500">指導実績</p>
