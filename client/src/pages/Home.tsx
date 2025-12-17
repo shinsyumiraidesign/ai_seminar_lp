@@ -168,12 +168,12 @@ export default function Home() {
                     こんなお悩みありませんか？
                   </h3>
                   {[
-                    "ChatGPTで天気やレシピを調べるだけになっている",
-                    "プロンプトを書いても、期待した答えが返ってこない",
-                    "同僚は「AIで効率化した」と言うが、自分は実感できない",
-                    "「Dify」「Make」という言葉は聞くが、何ができるか分からない",
+                    "AI使っても時短ができてない...",
+                    "思い通りのものが作れない...",
+                    "同僚は効率化してるのに自分は...",
+                    "DifyやMakeって何??",
                     "YouTubeや本で勉強したが、実務への応用方法が見えない",
-                    "このままだと取り残される不安がある"
+                    "このままだと取り残されそうで不安"
                   ].map((item, index) => (
                     <div key={index} className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-brand-pink/30 transition-colors">
                       <div className="mt-1 min-w-[20px] h-5 rounded border-2 border-slate-300 flex items-center justify-center">
@@ -188,7 +188,7 @@ export default function Home() {
               <div className="mt-16 text-center bg-slate-900 text-white p-8 rounded-2xl shadow-xl">
                 <p className="text-lg md:text-xl font-bold mb-2">もし3つ以上当てはまるなら...</p>
                 <p className="text-2xl md:text-3xl font-heading text-brand-yellow">
-                  あなたは「AIを使えているフリ」を<br className="md:hidden" />しているだけかもしれません
+                  あなたは「AIを使えているフリ」<br className="md:hidden" />をしているだけかもしれません
                 </p>
               </div>
             </div>
