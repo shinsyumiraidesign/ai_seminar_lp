@@ -211,8 +211,8 @@ export default function Home() {
               <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
                 <div className="h-2 bg-brand-pink w-full"></div>
                 <CardHeader className="text-center pb-2">
-                  <div className="w-16 h-16 mx-auto bg-brand-pink/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <Zap className="w-8 h-8 text-brand-pink" />
+                  <div className="w-full aspect-video mx-auto mb-4 group-hover:scale-105 transition-transform overflow-hidden rounded-lg">
+                    <img src="/images/feature_personal.png" alt="自分専用AI" className="w-full h-full object-cover" />
                   </div>
                   <CardTitle className="text-xl font-bold">明日から使える<br />「自分専用AI」</CardTitle>
                 </CardHeader>
@@ -230,8 +230,8 @@ export default function Home() {
               <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
                 <div className="h-2 bg-brand-blue w-full"></div>
                 <CardHeader className="text-center pb-2">
-                  <div className="w-16 h-16 mx-auto bg-brand-blue/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <Users className="w-8 h-8 text-brand-blue" />
+                  <div className="w-full aspect-video mx-auto mb-4 group-hover:scale-105 transition-transform overflow-hidden rounded-lg">
+                    <img src="/images/feature_support.png" alt="個別フォロー" className="w-full h-full object-cover" />
                   </div>
                   <CardTitle className="text-xl font-bold">つまずいても安心の<br />個別フォロー</CardTitle>
                 </CardHeader>
@@ -249,8 +249,8 @@ export default function Home() {
               <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
                 <div className="h-2 bg-brand-yellow w-full"></div>
                 <CardHeader className="text-center pb-2">
-                  <div className="w-16 h-16 mx-auto bg-brand-yellow/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <Star className="w-8 h-8 text-yellow-600" />
+                  <div className="w-full aspect-video mx-auto mb-4 group-hover:scale-105 transition-transform overflow-hidden rounded-lg">
+                    <img src="/images/feature_tools.png" alt="最新ツール" className="w-full h-full object-cover" />
                   </div>
                   <CardTitle className="text-xl font-bold">最新ツールで<br />差をつける</CardTitle>
                 </CardHeader>
