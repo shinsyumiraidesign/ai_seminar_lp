@@ -88,6 +88,14 @@ export default function Home() {
               </span>
             </h1>
 
+            <div className="mb-8 flex justify-center">
+              <img 
+                src="/images/seminar_photo.jpg" 
+                alt="セミナー風景" 
+                className="rounded-2xl shadow-xl max-w-full md:max-w-2xl h-auto object-cover border-4 border-white"
+              />
+            </div>
+
             <p className="text-lg md:text-2xl text-slate-600 mb-8 max-w-3xl mx-auto font-medium">
               あなた専用のAI秘書を作って持ち帰る実践ワークショップ<br />
               <span className="text-sm md:text-base text-slate-500 mt-2 block">
@@ -156,6 +164,9 @@ export default function Home() {
                   />
                 </div>
                 <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-brand-blue mb-4 border-b-2 border-brand-yellow inline-block pb-1">
+                    こんなお悩みありませんか？
+                  </h3>
                   {[
                     "ChatGPTで天気やレシピを調べるだけになっている",
                     "プロンプトを書いても、期待した答えが返ってこない",
