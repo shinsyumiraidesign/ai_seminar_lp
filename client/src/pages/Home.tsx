@@ -450,7 +450,7 @@ export default function Home() {
                   <h2 className="text-sm font-bold text-brand-blue mb-2">講師紹介</h2>
                   <h3 className="text-3xl font-heading font-bold mb-2">森角 太一</h3>
                   <p className="text-slate-600 font-medium mb-6">
-                    信州ミライデザインLAB. 代表 / 元教員AIコンサルタント
+                    信州ミライデザインLAB. 代表 　　　　 元教員 | AIコンサルタント
                   </p>
                 </div>
                 
@@ -472,7 +472,7 @@ export default function Home() {
                     </div>
                     <div className="bg-white p-3 rounded-lg shadow-sm">
                       <p className="text-xs text-slate-500">AI導入支援/研修</p>
-                      <p className="font-bold text-lg">県内６団体以上</p>
+                      <p className="font-bold text-lg">県内6団体以上</p>
                     </div>
                     <div className="bg-white p-3 rounded-lg shadow-sm">
                       <p className="text-xs text-slate-500">平均業務効率化率</p>
