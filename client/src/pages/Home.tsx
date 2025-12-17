@@ -446,7 +446,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto bg-slate-50 rounded-3xl p-8 md:p-12 shadow-inner">
               <div className="flex flex-col gap-6 items-center">
-                <div className="w-full text-center">
+                <div className="w-full text-left">
                   <h2 className="text-sm font-bold text-brand-blue mb-2">講師紹介</h2>
                   <h3 className="text-3xl font-heading font-bold mb-2">森角 太一</h3>
                   <p className="text-slate-600 font-medium mb-6">
