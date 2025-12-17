@@ -199,6 +199,7 @@ export default function Home() {
         <section className="py-20 bg-slate-50 relative">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
+              <p className="text-xl md:text-2xl font-bold text-slate-600 mb-4">そんなあなたを救う</p>
               <h2 className="font-heading text-4xl md:text-6xl font-extrabold mb-4 text-brand-blue leading-tight">
                 月曜日からの仕事が激変する<br />
                 <span className="text-brand-pink">2.5時間！！！</span>
