@@ -124,7 +124,7 @@ export default function Home() {
                 <ArrowRight className="ml-2 w-6 h-6" />
               </Button>
               <p className="text-brand-pink font-bold text-sm">
-                ＼ 30名限定・埋まり次第終了／
+                ＼ 30名限定・埋まり次第終了。すでに12名以上の申し込みあり／
               </p>
             </div>
 
@@ -632,10 +632,10 @@ export default function Home() {
                 <div className="text-center">
                   <div className="flex items-center gap-4 text-sm font-bold text-slate-600">
                     <div className="flex items-center gap-1">
-                      <ShieldCheck className="w-4 h-4 text-green-500" /> 前回は3日でほぼ満席
+                      <ShieldCheck className="w-4 h-4 text-green-500" /> 前回開催は3日でほぼ満席
                     </div>
                     <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4 text-orange-500" /> 次回開催未定
+                      <Clock className="w-4 h-4 text-orange-500" /> 次回開催は未定
                     </div>
                   </div>
                 </div>
