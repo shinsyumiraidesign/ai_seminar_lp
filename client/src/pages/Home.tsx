@@ -13,6 +13,7 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
+    document.title = "【長野県上田市】ChatGPT活用セミナー2026｜業務効率化・自分専用AI作成講座";
     const targetDate = new Date("2026-01-24T10:00:00");
     
     const interval = setInterval(() => {
