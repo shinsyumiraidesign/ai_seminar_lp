@@ -13,8 +13,8 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    document.title = "【長野県上田市】ChatGPT活用セミナー2026｜業務効率化・自分専用AI作成講座";
-    const targetDate = new Date("2026-01-24T10:00:00");
+    document.title = "【長野県上田市】AI活用バイブコーディングセミナー2026｜その場でアプリを作って帰る実践講座";
+    const targetDate = new Date("2026-04-18T10:00:00");
     
     const interval = setInterval(() => {
       const now = new Date();
@@ -76,17 +76,18 @@ export default function Home() {
 
           <div className="container relative z-10 mx-auto px-4 py-12 text-center">
             <div className="inline-block mb-6 px-4 py-1 bg-white/80 backdrop-blur rounded-full border border-brand-pink/30 text-brand-pink font-bold text-sm shadow-sm animate-bounce">
-              ＼ 2026年1月24日(土) 開催 ／
+              ＼ 2026年4月18日(土) 開催 ／
             </div>
             
             <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
-              ChatGPTを<br className="md:hidden" />
-              <span className="text-gradient">「使ってるつもり」</span><br className="md:hidden" />
-              から卒業する<br />
+              AI活用による<br className="md:hidden" />
+              <span className="text-gradient">「バイブコーディング」</span><br />
+              でその場でアプリを<br className="md:hidden" />
               <span className="relative inline-block mt-2">
-                2.5時間
+                作って帰る
                 <span className="absolute bottom-1 left-0 w-full h-3 bg-brand-yellow/50 -z-10 transform -rotate-1"></span>
               </span>
+              セミナー
             </h1>
 
             <div className="mb-8 flex justify-center">
@@ -98,16 +99,17 @@ export default function Home() {
             </div>
 
             <p className="text-lg md:text-2xl text-slate-600 mb-8 max-w-3xl mx-auto font-medium">
-              あなた専用のAI秘書を作って持ち帰る実践ワークショップ<br />
+              コードを書かずにAIと会話するだけで<br />
+              あなただけのオリジナルアプリを作成・持ち帰る実践ワークショップ<br />
               <span className="text-sm md:text-base text-slate-500 mt-2 block">
-                〜 Dify・Make等の最新自動化ツールも体験 〜
+                〜 Cursor・Claude・Bolt等の最新バイブコーディングツールを体験 〜
               </span>
             </p>
 
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-10 text-slate-700">
               <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">
                 <Calendar className="w-5 h-5 text-brand-blue" />
-                <span className="font-bold">1月24日(土) 10:00-12:30</span>
+                <span className="font-bold">4月18日(土) 10:00-12:30</span>
               </div>
               <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">
                 <MapPin className="w-5 h-5 text-brand-pink" />
@@ -149,9 +151,9 @@ export default function Home() {
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-16">
                 <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6">
-                  8割の人がChatGPTの能力の<br />
-                  <span className="text-red-500 text-5xl">5%</span>しか使えていない<br />
-                  衝撃の事実
+                  「アプリを作りたい」と思っても<br />
+                  <span className="text-red-500 text-5xl">9割</span>の人が<br />
+                  最初の一歩で挫折する現実
                 </h2>
                 <div className="w-24 h-1 bg-slate-200 mx-auto rounded-full"></div>
               </div>
@@ -169,11 +171,11 @@ export default function Home() {
                     こんなお悩みありませんか？
                   </h3>
                   {[
-                    "AI使っても時短ができてない...",
-                    "思い通りのものが作れない...",
-                    "同僚は効率化してるのに自分は...",
-                    "DifyやMakeって何??",
-                    "このままだと取り残されそうで不安"
+                    "プログラミングが難しくて諦めた...",
+                    "AIを使いたいけど何から始めればいいか...",
+                    "アイデアはあるのに形にできない...",
+                    "バイブコーディングって何??",
+                    "このままだとAI時代に取り残されそうで不安"
                   ].map((item, index) => (
                     <div key={index} className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-brand-pink/30 transition-colors">
                       <div className="mt-1 min-w-[20px] h-5 rounded border-2 border-slate-300 flex items-center justify-center">
@@ -189,7 +191,7 @@ export default function Home() {
                 <p className="text-sm md:text-base font-bold mb-2 text-slate-300">そんなあなたを救う</p>
                 <p className="text-lg md:text-xl font-bold mb-2">もし3つ以上当てはまるなら...</p>
                 <p className="text-2xl md:text-3xl font-heading text-brand-yellow">
-                  あなたは「AIを使えているフリ」<br className="md:hidden" />をしているだけかもしれません
+                  あなたはまだ「バイブコーディング」の<br className="md:hidden" />可能性を知らないだけです
                 </p>
               </div>
             </div>
@@ -202,8 +204,8 @@ export default function Home() {
             <div className="text-center mb-16">
               <p className="text-xl md:text-2xl font-bold text-slate-600 mb-4">そんなあなたを救う</p>
               <h2 className="font-heading text-4xl md:text-6xl font-extrabold mb-4 text-brand-blue leading-tight">
-                月曜日からの仕事が激変する<br />
-                <span className="text-brand-pink">2.5時間！！！</span>
+                当日アプリを作って<br />
+                <span className="text-brand-pink">持ち帰れる2.5時間！！！</span>
               </h2>
               <p className="text-slate-600">本セミナーが約束する3つの価値</p>
             </div>
@@ -214,13 +216,13 @@ export default function Home() {
                 <div className="h-2 bg-brand-pink w-full"></div>
                 <CardHeader className="text-center pb-2">
                   <div className="w-full aspect-video mx-auto mb-4 group-hover:scale-105 transition-transform overflow-hidden rounded-lg">
-                    <img src="/images/feature_personal.png" alt="自分専用AI" className="w-full h-full object-cover" />
+                    <img src="/images/feature_personal.png" alt="自分専用アプリ" className="w-full h-full object-cover" />
                   </div>
-                  <CardTitle className="text-xl font-bold">明日から使える<br />「自分専用AI」</CardTitle>
+                  <CardTitle className="text-xl font-bold">当日完成する<br />「自分専用アプリ」</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center text-slate-600">
                   <p className="mb-4">
-                    あなたの実際の業務（メール、報告書、企画書）にカスタマイズしたAIツールをその場で作成。
+                    あなたのアイデアや業務課題をもとに、AIと会話しながらオリジナルアプリをその場で作成。
                   </p>
                   <div className="bg-slate-100 py-2 px-4 rounded-full text-sm font-bold text-slate-800 inline-block">
                     完成品を持ち帰れます
@@ -239,7 +241,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="text-center text-slate-600">
                   <p className="mb-4">
-                    講師が各席を巡回し、あなたの疑問に直接回答。「うちの業界では？」もその場で解決。
+                    講師が各席を巡回し、あなたのアプリ作成を直接サポート。「こんなの作りたい」もその場で実現。
                   </p>
                   <div className="bg-slate-100 py-2 px-4 rounded-full text-sm font-bold text-slate-800 inline-block">
                     その場で解決策を提示
@@ -258,7 +260,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="text-center text-slate-600">
                   <p className="mb-4">
-                    ChatGPTの次のステージ「Dify」「Make」の実践デモと活用事例を特別公開。
+                    Cursor・Claude・Bolt等の最新バイブコーディングツールの実践デモと活用事例を特別公開。
                   </p>
                   <div className="bg-slate-100 py-2 px-4 rounded-full text-sm font-bold text-slate-800 inline-block">
                     1年後の未来が見えます
@@ -288,19 +290,19 @@ export default function Home() {
                 <div className="mt-8 space-y-6">
                   <div className="flex items-center gap-4 text-slate-500">
                     <span className="text-2xl">😓</span>
-                    <span className="text-lg font-medium line-through decoration-slate-400">メール返信に30分</span>
+                    <span className="text-lg font-medium line-through decoration-slate-400">アプリ開発は専門家に頼むしかない</span>
                   </div>
                   <div className="flex items-center gap-4 text-slate-500">
                     <span className="text-2xl">😓</span>
-                    <span className="text-lg font-medium line-through decoration-slate-400">議事録作成に1時間</span>
+                    <span className="text-lg font-medium line-through decoration-slate-400">プログラミングの勉強に何ヶ月もかかる</span>
                   </div>
                   <div className="flex items-center gap-4 text-slate-500">
                     <span className="text-2xl">😓</span>
-                    <span className="text-lg font-medium line-through decoration-slate-400">企画書の下書きに2時間</span>
+                    <span className="text-lg font-medium line-through decoration-slate-400">アイデアがあっても形にできない</span>
                   </div>
                   <div className="flex items-center gap-4 text-slate-500">
                     <span className="text-2xl">😓</span>
-                    <span className="text-lg font-medium line-through decoration-slate-400">定型業務で1日が終わる</span>
+                    <span className="text-lg font-medium line-through decoration-slate-400">外注すると数十万円かかる</span>
                   </div>
                 </div>
               </div>
@@ -313,19 +315,19 @@ export default function Home() {
                 <div className="mt-8 space-y-6">
                   <div className="flex items-center gap-4 text-slate-800">
                     <span className="text-2xl">😊</span>
-                    <span className="text-lg font-bold">メール返信が3分で完了</span>
+                    <span className="text-lg font-bold">AIに話しかけるだけでアプリが完成</span>
                   </div>
                   <div className="flex items-center gap-4 text-slate-800">
                     <span className="text-2xl">😊</span>
-                    <span className="text-lg font-bold">議事録が自動で要約される</span>
+                    <span className="text-lg font-bold">当日2.5時間でオリジナルアプリを作成</span>
                   </div>
                   <div className="flex items-center gap-4 text-slate-800">
                     <span className="text-2xl">😊</span>
-                    <span className="text-lg font-bold">企画書の叩き台が5分で完成</span>
+                    <span className="text-lg font-bold">アイデアを即座に形にできる</span>
                   </div>
                   <div className="flex items-center gap-4 text-slate-800">
                     <span className="text-2xl">😊</span>
-                    <span className="text-lg font-bold">創造的な仕事に集中できる</span>
+                    <span className="text-lg font-bold">自分でどんどんアプリを改善できる</span>
                   </div>
                 </div>
                 
@@ -338,12 +340,12 @@ export default function Home() {
             <div className="mt-12 text-center">
               <div className="inline-flex flex-col md:flex-row gap-8 bg-white p-6 rounded-xl shadow-md border border-slate-100">
                 <div className="text-center px-8 border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0">
-                  <p className="text-sm text-slate-500 font-bold mb-1">削減できる時間</p>
-                  <p className="text-3xl font-heading font-extrabold text-brand-blue">週10時間以上</p>
+                  <p className="text-sm text-slate-500 font-bold mb-1">アプリ開発コスト削減</p>
+                  <p className="text-3xl font-heading font-extrabold text-brand-blue">数十万円→0円</p>
                 </div>
                 <div className="text-center px-8">
-                  <p className="text-sm text-slate-500 font-bold mb-1">生産性向上</p>
-                  <p className="text-3xl font-heading font-extrabold text-brand-pink">2.5倍</p>
+                  <p className="text-sm text-slate-500 font-bold mb-1">開発スピード向上</p>
+                  <p className="text-3xl font-heading font-extrabold text-brand-pink">数ヶ月→数時間</p>
                 </div>
               </div>
             </div>
@@ -368,22 +370,22 @@ export default function Home() {
                 </div>
                 <div className="flex-grow pb-8">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">10:00-10:45</span>
-                    <h3 className="text-xl font-bold">【講義】AIの黄金法則</h3>
+                    <span className="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">10:00-10:30</span>
+                    <h3 className="text-xl font-bold">【講義】バイブコーディングとは</h3>
                   </div>
                   <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                     <ul className="space-y-2 text-slate-600">
                       <li className="flex items-start gap-2">
                         <span className="text-brand-pink font-bold">・</span>
-                        なぜあなたのAI活用は失敗するのか
+                        バイブコーディングの基本概念と可能性
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-brand-pink font-bold">・</span>
-                        プロンプトエンジニアリングの基礎
+                        Cursor・Claude・Bolt等のツール紹介
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-brand-pink font-bold">・</span>
-                        ChatGPT/Dify/Makeの使い分け
+                        AIへの指示の出し方（プロンプト）の基礎
                       </li>
                     </ul>
                   </div>
@@ -398,22 +400,22 @@ export default function Home() {
                 </div>
                 <div className="flex-grow pb-8">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">10:45-12:15</span>
-                    <h3 className="text-xl font-bold">【実践】AI秘書構築</h3>
+                    <span className="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">10:30-12:15</span>
+                    <h3 className="text-xl font-bold">【実践】アプリ作成ワークショップ</h3>
                   </div>
                   <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-brand-pink">
                     <ul className="space-y-2 text-slate-600">
                       <li className="flex items-start gap-2">
                         <span className="text-brand-pink font-bold">・</span>
-                        自分の業務を分析
+                        作りたいアプリのアイデア整理
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-brand-pink font-bold">・</span>
-                        カスタムプロンプト作成
+                        AIと会話しながらアプリを構築
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-brand-pink font-bold">・</span>
-                        GPTs or Difyで自動化
+                        デバッグ・改善の繰り返し（バイブコーディング体験）
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-brand-pink font-bold">・</span>
@@ -432,10 +434,10 @@ export default function Home() {
                 <div className="flex-grow">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded">12:15-12:30</span>
-                    <h3 className="text-xl font-bold">【交流】</h3>
+                    <h3 className="text-xl font-bold">【発表・交流】</h3>
                   </div>
                   <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                    <p className="text-slate-600">質疑応答・ネットワーキング</p>
+                    <p className="text-slate-600">作ったアプリの発表・質疑応答・ネットワーキング</p>
                   </div>
                 </div>
               </div>
@@ -489,7 +491,7 @@ export default function Home() {
                   <div className="relative bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                     <div className="absolute -top-3 -left-2 text-4xl text-brand-pink opacity-30">"</div>
                     <p className="text-slate-700 italic relative z-10">
-                      元数学教師の私だからこそ、難しいことを分かりやすく伝えられます。一緒にAIで仕事を楽しくしましょう！
+                      元数学教師の私だからこそ、難しいことを分かりやすく伝えられます。バイブコーディングで、あなたのアイデアを一緒に形にしましょう！
                     </p>
                   </div>
                 </div>
@@ -515,11 +517,11 @@ export default function Home() {
                 },
                 {
                   role: "30代・営業職・Mさん",
-                  text: "作ったツールで翌週の仕事が3時間短縮できました"
+                  text: "作ったアプリで翌週の仕事が3時間短縮できました"
                 },
                 {
                   role: "50代・経営者・Tさん",
-                  text: "Difyの可能性に驚いた。投資対効果が見えた"
+                  text: "バイブコーディングの可能性に驚いた。投資対効果が見えた"
                 }
               ].map((item, index) => (
                 <Card key={index} className="bg-slate-800 border-slate-700 text-slate-200">
@@ -553,7 +555,7 @@ export default function Home() {
                   <tbody>
                     <tr className="border-b border-slate-100">
                       <th className="py-4 font-bold text-slate-500 w-24">日時</th>
-                      <td className="py-4 font-medium">2026年1月24日(土) 10:00-12:30</td>
+                      <td className="py-4 font-medium">2026年4月18日(土) 10:00-12:30</td>
                     </tr>
                     <tr className="border-b border-slate-100">
                       <th className="py-4 font-bold text-slate-500">会場</th>
@@ -644,7 +646,7 @@ export default function Home() {
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6">
                 3,500円 = コーヒー10杯分の投資で<br />
-                <span className="text-brand-blue">残りの人生の働き方</span>が変わります
+                <span className="text-brand-blue">あなただけのオリジナルアプリ</span>が完成します
               </h2>
 
               <div className="space-y-4">
@@ -680,15 +682,15 @@ export default function Home() {
                     Q. プログラミング知識は必要ですか？
                   </AccordionTrigger>
                   <AccordionContent className="text-slate-600 pb-4">
-                    A. 一切不要です。マウス操作ができれば大丈夫です。専門用語も極力使わずに解説します。
+                    A. 一切不要です。バイブコーディングはAIに日本語で話しかけるだけでアプリが作れる手法です。マウス操作ができれば大丈夫です。
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2" className="bg-white border border-slate-200 rounded-xl px-4">
                   <AccordionTrigger className="font-bold text-lg hover:no-underline">
-                    Q. ChatGPTの有料版は必要ですか？
+                    Q. どんなアプリが作れますか？
                   </AccordionTrigger>
                   <AccordionContent className="text-slate-600 pb-4">
-                    A. 無料版で十分です。有料版をお持ちの方はより高度な機能も体験いただけますが、必須ではありません。
+                    A. 業務管理ツール、スケジュール管理、顧客管理、簡単なゲームなど、アイデア次第でさまざまなアプリが作れます。当日は講師がアイデア出しもサポートします。
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-3" className="bg-white border border-slate-200 rounded-xl px-4">
@@ -704,7 +706,15 @@ export default function Home() {
                     Q. PCを持っていない場合は？
                   </AccordionTrigger>
                   <AccordionContent className="text-slate-600 pb-4">
-                    A. スマホ参加も可能ですが、実際のツール作成を行うため、効果が限定的になります。可能な限りPCのご持参をお勧めします。
+                    A. アプリ作成を行うため、ノートPCのご持参が必須となります。スマホのみでの参加は実習が難しいため、ご注意ください。
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-5" className="bg-white border border-slate-200 rounded-xl px-4">
+                  <AccordionTrigger className="font-bold text-lg hover:no-underline">
+                    Q. 作ったアプリは持ち帰れますか？
+                  </AccordionTrigger>
+                  <AccordionContent className="text-slate-600 pb-4">
+                    A. はい、当日作成したアプリはそのままお持ち帰りいただけます。セミナー後もご自身で改善・拡張できるよう、使い方もしっかりお伝えします。
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -719,12 +729,12 @@ export default function Home() {
             
             <div className="max-w-2xl mx-auto text-lg text-slate-600 mb-12 space-y-6">
               <p>
-                月曜日の朝、同僚が10分で終わらせる仕事に<br />
-                あなたは1時間かけ続けますか？
+                「アプリを作りたい」と思い続けて<br />
+                何年も経ってしまっていませんか？
               </p>
               <p className="font-bold text-slate-900 text-xl">
                 それとも、2.5時間の投資で<br />
-                残業から解放される未来を選びますか？
+                自分のアイデアをアプリにする未来を選びますか？
               </p>
             </div>
 
@@ -757,7 +767,7 @@ export default function Home() {
           
           <p>お問い合わせ：shinsyu.mirai.design@gmail.com / 090-1828-7103</p>
           <div className="pt-8 border-t border-slate-800 mt-8">
-            &copy; 2025 信州ミライデザインLAB. All rights reserved.
+            &copy; 2026 信州ミライデザインLAB. All rights reserved.
           </div>
         </div>
       </footer>
