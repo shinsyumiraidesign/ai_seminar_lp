@@ -571,7 +571,7 @@ export default function Home() {
                     </tr>
                     <tr className="border-b border-slate-100">
                       <th className="py-4 font-bold text-slate-500">参加費</th>
-                      <td className="py-4 font-bold text-xl text-brand-blue">3,500円（税込）</td>
+                      <td className="py-4 font-bold text-xl text-brand-blue">5,500円（税込）</td>
                     </tr>
                     <tr>
                       <th className="py-4 font-bold text-slate-500">持ち物</th>
@@ -645,7 +645,7 @@ export default function Home() {
               </div>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6">
-                3,500円 = コーヒー10杯分の投資で<br />
+                5,500円 = コーヒー15杯分の投資で<br />
                 <span className="text-brand-blue">あなただけのオリジナルアプリ</span>が完成します
               </h2>
 
@@ -751,7 +751,7 @@ export default function Home() {
               <p className="font-bold text-brand-pink mb-2">PS.</p>
               <p className="text-sm text-slate-600">
                 地域貢献価格での開催は今回限り。<br />
-                通常のコンサル料金（1時間15,000円）の1/4以下で受講できるチャンスです。
+                通常のコンサル料金（1時間15,000円）の1/3以下で受講できるチャンスです。
               </p>
             </div>
           </div>
