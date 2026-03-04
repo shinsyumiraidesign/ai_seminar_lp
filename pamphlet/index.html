@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORENOVA パンフレット — ページ一覧</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans CJK JP', 'Meiryo', sans-serif;
+            background: #f0f2f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0d1535 0%, #1a2e6e 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-logo {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+        }
+
+        .header-title { font-size: 20px; font-weight: 900; }
+        .header-sub { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-white {
+            background: white;
+            color: #1a2e6e;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .notice {
+            background: #fffde7;
+            border-left: 4px solid #f9a825;
+            padding: 12px 40px;
+            font-size: 12px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .notice strong { color: #e65100; }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a2e6e;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #1a2e6e;
+        }
+
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .page-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .page-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .page-card-header {
+            height: 8px;
+        }
+
+        .page-card-body {
+            padding: 14px 16px;
+        }
+
+        .page-card-num {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .page-card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .page-card-desc {
+            font-size: 11px;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        .page-card-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .color-navy   { background: #1a2e6e; }
+        .color-blue   { background: #1565c0; }
+        .color-green  { background: #1b5e20; }
+        .color-purple { background: #4a148c; }
+        .color-orange { background: #bf360c; }
+
+        .edit-guide {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .edit-guide h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a2e6e;
+            margin-bottom: 12px;
+        }
+
+        .edit-guide table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .edit-guide th {
+            background: #f0f2f8;
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 700;
+            color: #1a2e6e;
+        }
+
+        .edit-guide td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+            color: #555;
+            vertical-align: top;
+        }
+
+        .file-list {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .file-list h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a2e6e;
+            margin-bottom: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 12px;
+        }
+
+        .file-item:last-child { border-bottom: none; }
+
+        .file-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .file-name { font-weight: 700; color: #333; }
+        .file-desc { color: #888; font-size: 11px; }
+
+        footer {
+            background: #1a2e6e;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 16px;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<div class="header">
+    <div class="header-logo">C</div>
+    <div>
+        <div class="header-title">CORENOVA パンフレット</div>
+        <div class="header-sub">AI BUSINESS SOLUTION GUIDE — 編集可能HTMLファイル一覧</div>
+    </div>
+    <div class="header-actions">
+        <a href="page01.html" class="btn btn-white">表紙を開く</a>
+    </div>
+</div>
+
+<!-- 編集案内 -->
+<div class="notice">
+    <strong>編集方法：</strong>
+    各ページのHTMLファイルをテキストエディタ（VS Code、Sublime Textなど）で開いて編集できます。
+    共通デザイン（フォント・色・余白）は <strong>style.css</strong> を編集してください。
+    印刷・PDF出力はブラウザの「印刷」→「PDFに保存」でA4サイズで出力できます（背景グラフィックをONにしてください）。
+</div>
+
+<div class="container">
+
+    <!-- ページ一覧 -->
+    <div class="section-title">ページ一覧（クリックして開く）</div>
+    <div class="page-grid">
+
+        <a href="page01.html" class="page-card">
+            <div class="page-card-header color-navy"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P1</div>
+                <div class="page-card-title">表紙</div>
+                <div class="page-card-desc">AI BUSINESS SOLUTION GUIDE<br>会社ロゴ・キャッチコピー</div>
+                <span class="page-card-link color-navy">開く</span>
+            </div>
+        </a>
+
+        <a href="page02.html" class="page-card">
+            <div class="page-card-header color-navy"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P2</div>
+                <div class="page-card-title">ごあいさつ</div>
+                <div class="page-card-desc">代表メッセージ<br>コアバリュー</div>
+                <span class="page-card-link color-navy">開く</span>
+            </div>
+        </a>
+
+        <a href="page03.html" class="page-card">
+            <div class="page-card-header color-navy"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P3</div>
+                <div class="page-card-title">目次</div>
+                <div class="page-card-desc">こんなお悩みをお持ちの方へ<br>サービス一覧</div>
+                <span class="page-card-link color-navy">開く</span>
+            </div>
+        </a>
+
+        <a href="page04.html" class="page-card">
+            <div class="page-card-header color-blue"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P4</div>
+                <div class="page-card-title">AI×業務改善<br>コンサルティング</div>
+                <div class="page-card-desc">サービス概要・料金プラン</div>
+                <span class="page-card-link color-blue">開く</span>
+            </div>
+        </a>
+
+        <a href="page05.html" class="page-card">
+            <div class="page-card-header color-blue"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P5</div>
+                <div class="page-card-title">AI×業務改善<br>（詳細）</div>
+                <div class="page-card-desc">3フェーズ・AIツール例・導入効果</div>
+                <span class="page-card-link color-blue">開く</span>
+            </div>
+        </a>
+
+        <a href="page06.html" class="page-card">
+            <div class="page-card-header color-green"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P6</div>
+                <div class="page-card-title">AI人材<br>ビジネスマッチング</div>
+                <div class="page-card-desc">サービス概要・ニーズ別対応</div>
+                <span class="page-card-link color-green">開く</span>
+            </div>
+        </a>
+
+        <a href="page07.html" class="page-card">
+            <div class="page-card-header color-green"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P7</div>
+                <div class="page-card-title">AI人材マッチング<br>（詳細）</div>
+                <div class="page-card-desc">人材カテゴリー・利用の流れ</div>
+                <span class="page-card-link color-green">開く</span>
+            </div>
+        </a>
+
+        <a href="page08.html" class="page-card">
+            <div class="page-card-header color-purple"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P8</div>
+                <div class="page-card-title">AI/DX 人材育成</div>
+                <div class="page-card-desc">研修概要・助成金活用</div>
+                <span class="page-card-link color-purple">開く</span>
+            </div>
+        </a>
+
+        <a href="page09.html" class="page-card">
+            <div class="page-card-header color-purple"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P9</div>
+                <div class="page-card-title">AI/DX 人材育成<br>（詳細）</div>
+                <div class="page-card-desc">研修コース・導入効果</div>
+                <span class="page-card-link color-purple">開く</span>
+            </div>
+        </a>
+
+        <a href="page10.html" class="page-card">
+            <div class="page-card-header color-orange"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P10</div>
+                <div class="page-card-title">導入事例</div>
+                <div class="page-card-desc">4社の事例・お客様の声</div>
+                <span class="page-card-link color-orange">開く</span>
+            </div>
+        </a>
+
+        <a href="page11.html" class="page-card">
+            <div class="page-card-header color-navy"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P11</div>
+                <div class="page-card-title">会社概要・<br>お問い合わせ</div>
+                <div class="page-card-desc">会社情報・アクセス・連絡先</div>
+                <span class="page-card-link color-navy">開く</span>
+            </div>
+        </a>
+
+        <a href="page12.html" class="page-card">
+            <div class="page-card-header color-navy"></div>
+            <div class="page-card-body">
+                <div class="page-card-num">P12</div>
+                <div class="page-card-title">裏表紙</div>
+                <div class="page-card-desc">パートナー募集・連絡先</div>
+                <span class="page-card-link color-navy">開く</span>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- 編集ガイド -->
+    <div class="edit-guide">
+        <h3>編集ガイド — よく編集する箇所</h3>
+        <table>
+            <tr>
+                <th>編集内容</th>
+                <th>ファイル</th>
+                <th>編集方法</th>
+            </tr>
+            <tr>
+                <td>会社名・連絡先・住所</td>
+                <td>page11.html</td>
+                <td><code>.co-table</code> 内の各 <code>&lt;td&gt;</code> を変更</td>
+            </tr>
+            <tr>
+                <td>キャッチコピー・メッセージ</td>
+                <td>page02.html</td>
+                <td>メインタイトル・代表メッセージのテキストを変更</td>
+            </tr>
+            <tr>
+                <td>料金プラン</td>
+                <td>page04.html</td>
+                <td><code>.dtable</code> 内の各行を変更</td>
+            </tr>
+            <tr>
+                <td>導入事例</td>
+                <td>page10.html</td>
+                <td><code>.ibox-orange</code> 内の会社名・サービス・説明を変更</td>
+            </tr>
+            <tr>
+                <td>全体の色・フォント</td>
+                <td>style.css</td>
+                <td>カラー変数（#1a2e6e など）を一括置換</td>
+            </tr>
+            <tr>
+                <td>地図画像の差し替え</td>
+                <td>page11.html</td>
+                <td>地図プレースホルダーの <code>&lt;div&gt;</code> を <code>&lt;img src="map.jpg"&gt;</code> に変更</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ファイル一覧 -->
+    <div class="file-list">
+        <h3>ファイル構成</h3>
+        <div class="file-item">
+            <div class="file-icon" style="background:#e8eaf6;">📋</div>
+            <div>
+                <div class="file-name">index.html</div>
+                <div class="file-desc">このページ（ナビゲーション・編集ガイド）</div>
+            </div>
+        </div>
+        <div class="file-item">
+            <div class="file-icon" style="background:#e3f2fd;">🎨</div>
+            <div>
+                <div class="file-name">style.css</div>
+                <div class="file-desc">全ページ共通スタイルシート（色・フォント・レイアウト）</div>
+            </div>
+        </div>
+        <div class="file-item">
+            <div class="file-icon" style="background:#f3e5f5;">📄</div>
+            <div>
+                <div class="file-name">page01.html 〜 page12.html</div>
+                <div class="file-desc">各ページのHTMLファイル（A4縦型・個別編集可能）</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    CORENOVA株式会社 パンフレット HTMLファイル一式 — AIと人の力で、ビジネスの核心を再定義する
+</footer>
+
+</body>
+</html>
