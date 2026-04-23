@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1280" />
+  <title>C&Kメディカル様 DX支援提案書 | hitotoki</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #e4eaf0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* ===== スライド本体 1280×720 ===== */
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+    }
+
+    /* ===== ヘッダー ===== */
+    .header {
+      flex-shrink: 0;
+      height: 80px;
+      background: linear-gradient(135deg, #0c2340 0%, #1a5799 60%, #2471a3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 44px;
+      position: relative;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #f1c40f 0%, #e74c3c 33%, #9b59b6 66%, #3498db 100%);
+    }
+    .header-left { display: flex; flex-direction: column; gap: 3px; }
+    .header-eyebrow {
+      font-size: 9.5px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .header-title {
+      font-size: 23px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+    .header-title em { font-style: normal; color: #f8d347; }
+    .header-right { text-align: right; }
+    .header-company {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 1px;
+    }
+    .header-date {
+      font-size: 10px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 3px;
+    }
+
+    /* ===== ボディ ===== */
+    .body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 40px 12px;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    /* ===== 施策カード ===== */
+    .cards {
+      display: flex;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .card {
+      flex: 1;
+      border-radius: 8px;
+      padding: 10px 16px 9px;
+      border-left: 5px solid;
+    }
+    .card-voice {
+      border-color: #2471a3;
+      background: linear-gradient(120deg, #eaf3fb 0%, #f6fafe 100%);
+    }
+    .card-app {
+      border-color: #1e8449;
+      background: linear-gradient(120deg, #eafaf1 0%, #f5fdf8 100%);
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .badge {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 20px;
+      color: #fff;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+    .badge-blue { background: #2471a3; }
+    .badge-green { background: #1e8449; }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1a2e45;
+    }
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
+    }
+    .step {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .step-blue { background: #d6eaf8; color: #1a4f72; }
+    .step-green { background: #d5f5e3; color: #1a5e35; }
+    .arrow { font-size: 9px; color: #aab7c4; font-weight: 700; }
+    .card-note {
+      font-size: 9px;
+      color: #7f8c8d;
+      line-height: 1.5;
+    }
+
+    /* ===== ガントチャート ===== */
+    .gantt-wrap { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0c2340;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #d5dde8;
+    }
+
+    .gantt {
+      width: 100%;
+      height: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    /* ヘッダー行 */
+    .gantt thead th {
+      background: #0c2340;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 8px 0;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .gantt thead th.th-label {
+      text-align: left;
+      padding-left: 14px;
+      width: 196px;
+      border-radius: 6px 0 0 0;
+    }
+    .gantt thead th:last-child { border-radius: 0 6px 0 0; }
+
+    /* フェーズ区切り行 */
+    .gantt .phase-row td {
+      background: #eef2f7;
+      color: #0c2340;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 7px 0 7px 14px;
+      border-top: 2px solid #c8d6e5;
+      letter-spacing: 0.3px;
+    }
+
+    /* タスク行 */
+    .gantt .task-row td {
+      padding: 0;
+      border-bottom: 1px solid #f2f4f7;
+      height: 46px;
+      vertical-align: middle;
+    }
+    .gantt .task-row td.td-label {
+      padding-left: 18px;
+      font-size: 11px;
+      color: #2c3e50;
+      font-weight: 500;
+      width: 196px;
+    }
+    .gantt .task-row td.td-cell {
+      position: relative;
+    }
+    .gantt .task-row td.td-even {
+      background: #fafbfc;
+    }
+
+    /* ガントバー */
+    .bar {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 24px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+
+    /* 月列 — 3ヶ月×2分割=6列 */
+    .gantt col.mc { width: calc((100% - 196px) / 6); }
+
+    /* ===== フッター ===== */
+    .footer {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2px;
+    }
+    .legend {
+      display: flex;
+      gap: 18px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 9.5px;
+      color: #555;
+    }
+    .legend-box {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+    }
+    .footer-brand {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0c2340;
+      letter-spacing: 1.5px;
+      opacity: 0.55;
+    }
+  </style>
+</head>
+<body>
+<div class="slide">
+
+  <!-- ヘッダー -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-eyebrow">DX Support Proposal &nbsp;—&nbsp; 3-Month Plan</div>
+      <div class="header-title">C&Kメディカル様 &nbsp;<em>DX支援提案書</em></div>
+    </div>
+    <div class="header-right">
+      <div class="header-company">株式会社 hitotoki</div>
+      <div class="header-date">2025年 提案資料</div>
+    </div>
+  </div>
+
+  <!-- ボディ -->
+  <div class="body">
+
+    <!-- 施策カード -->
+    <div class="cards">
+      <!-- 施策① -->
+      <div class="card card-voice">
+        <div class="card-head">
+          <span class="badge badge-blue">施策①</span>
+          <span class="card-title">訪問記録のデジタル化 ― 録音 → テキスト → 資料化</span>
+        </div>
+        <div class="flow">
+          <span class="step step-blue">iPhone録音</span>
+          <span class="arrow">▶</span>
+          <span class="step step-blue">文字起こし（標準機能）</span>
+          <span class="arrow">▶</span>
+          <span class="step step-blue">Claudeへ貼り付け</span>
+          <span class="arrow">▶</span>
+          <span class="step step-blue">テキスト整形・要約</span>
+          <span class="arrow">▶</span>
+          <span class="step step-blue">スライド資料化</span>
+          <span class="arrow">▶</span>
+          <span class="step step-blue">ケアマネ共有</span>
+        </div>
+        <div class="card-note">※ 追加機器不要・iPhone標準ボイスレコーダー活用 ／ Claude Pro契約によるセキュアな運用</div>
+      </div>
+
+      <!-- 施策② -->
+      <div class="card card-app">
+        <div class="card-head">
+          <span class="badge badge-green">施策②</span>
+          <span class="card-title">現場スタッフ向け 日報入力アプリの構築・運用</span>
+        </div>
+        <div class="flow">
+          <span class="step step-green">要件定義</span>
+          <span class="arrow">▶</span>
+          <span class="step step-green">アプリ設計・開発</span>
+          <span class="arrow">▶</span>
+          <span class="step step-green">テスト運用</span>
+          <span class="arrow">▶</span>
+          <span class="step step-green">データ蓄積</span>
+          <span class="arrow">▶</span>
+          <span class="step step-green">顧客行動の可視化</span>
+        </div>
+        <div class="card-note">※ 現場スタッフが日々の訪問内容・顧客状況を入力 ／ データ蓄積による顧客管理の高度化</div>
+      </div>
+    </div>
+
+    <!-- ガントチャート -->
+    <div class="gantt-wrap">
+      <div class="section-title">3ヶ月 実施スケジュール</div>
+
+      <table class="gantt">
+        <colgroup>
+          <col style="width:196px" />
+          <col class="mc" /><col class="mc" />
+          <col class="mc" /><col class="mc" />
+          <col class="mc" /><col class="mc" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="th-label">施策 / タスク</th>
+            <th colspan="2">1ヶ月目</th>
+            <th colspan="2">2ヶ月目</th>
+            <th colspan="2">3ヶ月目</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- 施策① -->
+          <tr class="phase-row">
+            <td colspan="7">施策① ― 訪問記録デジタル化（録音 → Claude活用フロー）</td>
+          </tr>
+
+          <tr class="task-row">
+            <td class="td-label">Claude活用フロー設計・整備</td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:4px; right:0; background:linear-gradient(90deg,#2471a3,#5dade2);">フロー設計・整備</div>
+            </td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:0; right:4px; background:linear-gradient(90deg,#5dade2,#85c1e9);"></div>
+            </td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell"></td>
+            <td class="td-cell"></td>
+          </tr>
+
+          <tr class="task-row">
+            <td class="td-label">スタッフへの伝授・研修</td>
+            <td class="td-cell"></td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:4px; right:0; background:linear-gradient(90deg,#1a5276,#2471a3);">研修・伝授</div>
+            </td>
+            <td class="td-cell td-even" style="position:relative;">
+              <div class="bar" style="left:0; right:4px; background:linear-gradient(90deg,#2471a3,#5dade2);">定着サポート</div>
+            </td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell"></td>
+            <td class="td-cell"></td>
+          </tr>
+
+          <tr class="task-row">
+            <td class="td-label">ケアマネ共有フォーマット確立</td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:4px; right:0; background:linear-gradient(90deg,#2980b9,#7fb3d3);">フォーマット作成</div>
+            </td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:0; right:4px; background:linear-gradient(90deg,#7fb3d3,#aed6f1);">確認・調整</div>
+            </td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell"></td>
+            <td class="td-cell"></td>
+          </tr>
+
+          <!-- 施策② -->
+          <tr class="phase-row">
+            <td colspan="7">施策② ― 日報入力アプリ構築・運用</td>
+          </tr>
+
+          <tr class="task-row">
+            <td class="td-label">要件定義・設計</td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:4px; right:0; background:linear-gradient(90deg,#1e8449,#27ae60);">要件定義</div>
+            </td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:0; right:4px; background:linear-gradient(90deg,#27ae60,#52be80);">設計</div>
+            </td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell"></td>
+            <td class="td-cell"></td>
+          </tr>
+
+          <tr class="task-row">
+            <td class="td-label">アプリ開発・構築</td>
+            <td class="td-cell"></td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:4px; right:0; background:linear-gradient(90deg,#1e8449,#27ae60);">開発開始</div>
+            </td>
+            <td class="td-cell td-even" style="position:relative;">
+              <div class="bar" style="left:0; right:0; background:linear-gradient(90deg,#27ae60,#52be80);">開発・構築</div>
+            </td>
+            <td class="td-cell td-even" style="position:relative;">
+              <div class="bar" style="left:0; right:4px; background:linear-gradient(90deg,#52be80,#82e0aa);">テスト運用</div>
+            </td>
+            <td class="td-cell"></td>
+            <td class="td-cell"></td>
+          </tr>
+
+          <tr class="task-row">
+            <td class="td-label">テスト運用・修正・調整</td>
+            <td class="td-cell"></td>
+            <td class="td-cell"></td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell td-even" style="position:relative;">
+              <div class="bar" style="left:4px; right:0; background:linear-gradient(90deg,#1e8449,#27ae60);">テスト・修正</div>
+            </td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:0; right:4px; background:linear-gradient(90deg,#27ae60,#52be80);">調整・完成</div>
+            </td>
+            <td class="td-cell"></td>
+          </tr>
+
+          <!-- 伴走サポート -->
+          <tr class="phase-row">
+            <td colspan="7">伴走サポート</td>
+          </tr>
+
+          <tr class="task-row">
+            <td class="td-label">本格運用・伴走サポート</td>
+            <td class="td-cell"></td>
+            <td class="td-cell"></td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell td-even"></td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:4px; right:0; background:linear-gradient(90deg,#7d3c98,#a569bd);">本格運用</div>
+            </td>
+            <td class="td-cell" style="position:relative;">
+              <div class="bar" style="left:0; right:4px; background:linear-gradient(90deg,#a569bd,#c39bd3);">伴走サポート</div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- フッター -->
+    <div class="footer">
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-box" style="background:#2471a3;"></div>
+          <span>施策① 録音 → Claude活用フロー</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-box" style="background:#27ae60;"></div>
+          <span>施策② 日報入力アプリ構築</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-box" style="background:#7d3c98;"></div>
+          <span>本格運用・伴走サポート</span>
+        </div>
+      </div>
+      <div class="footer-brand">株式会社 hitotoki</div>
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /slide -->
+</body>
+</html>
