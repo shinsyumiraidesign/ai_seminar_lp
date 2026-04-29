@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>心・体・お金の未来投資セミナー in 上田 | 2026年5月30日</title>
+  <meta name="description" content="腸から若返り、未来のお金の不安をゼロに。30〜50代女性のための1日完結セミナー。参加費1,000円。2026年5月30日（土）上田市開催。" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Meiryo', sans-serif;
+      background: #fff;
+      color: #333;
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto;
+      padding-bottom: 80px; /* fixed CTAの分 */
+    }
+
+    /* ===== COLORS ===== */
+    :root {
+      --sky: #5BC8E8;
+      --sky-light: #E8F7FC;
+      --sky-mid: #A8DFF0;
+      --yellow: #FFD84D;
+      --yellow-light: #FFFBE6;
+      --yellow-dark: #F5A623;
+      --coral: #FF6B6B;
+      --white: #ffffff;
+      --text-dark: #1a1a2e;
+      --text-mid: #444;
+      --text-light: #777;
+    }
+
+    /* ===== UTILITY ===== */
+    .tag {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--text-dark);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+    .section-title span {
+      border-bottom: 3px solid var(--yellow);
+      padding-bottom: 2px;
+    }
+    .btn-peatix {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, var(--yellow-dark) 0%, var(--yellow) 100%);
+      color: var(--text-dark);
+      font-size: 17px;
+      font-weight: 900;
+      text-align: center;
+      text-decoration: none;
+      padding: 18px 12px;
+      border-radius: 50px;
+      box-shadow: 0 6px 20px rgba(245,166,35,.45);
+      letter-spacing: .04em;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn-peatix:active { transform: scale(.97); box-shadow: 0 3px 10px rgba(245,166,35,.3); }
+    .btn-peatix small {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 3px;
+      opacity: .8;
+    }
+    .placeholder {
+      width: 100%;
+      background: #e8f4f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7ab8cc;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* ===== FIXED CTA BAR ===== */
+    .fixed-cta {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 999;
+      background: rgba(255,255,255,.97);
+      border-top: 2px solid var(--yellow);
+      padding: 10px 16px 12px;
+      box-shadow: 0 -4px 16px rgba(0,0,0,.12);
+    }
+    .fixed-cta .btn-peatix { font-size: 15px; padding: 14px 12px; }
+
+    /* ===== SECTION 1: FV ===== */
+    .fv {
+      background: linear-gradient(160deg, var(--sky-light) 0%, var(--yellow-light) 100%);
+      padding: 0 0 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .fv::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(91,200,232,.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .fv-img-wrap {
+      width: 100%;
+      height: 280px;
+      position: relative;
+      overflow: hidden;
+    }
+    .fv-img-wrap .placeholder { height: 280px; border-radius: 0; font-size: 14px; }
+    .fv-badge {
+      position: absolute;
+      top: 14px; left: 14px;
+      background: var(--coral);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 5px 12px;
+      border-radius: 20px;
+      letter-spacing: .06em;
+      box-shadow: 0 3px 10px rgba(255,107,107,.4);
+    }
+    .fv-body { padding: 20px 18px 0; }
+    .fv-eyebrow {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--sky);
+      letter-spacing: .12em;
+      margin-bottom: 8px;
+    }
+    .fv-main-copy {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    .fv-main-copy em {
+      font-style: normal;
+      color: var(--sky);
+    }
+    .fv-sub-copy {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #555;
+      background: var(--white);
+      border-left: 4px solid var(--yellow);
+      border-right: 4px solid var(--yellow);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .fv-sub-copy strong { color: var(--coral); }
+    .fv-date-box {
+      background: var(--white);
+      border: 2px solid var(--sky-mid);
+      border-radius: 12px;
+      padding: 10px 14px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .fv-date-box .date-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--sky);
+      letter-spacing: .1em;
+      margin-bottom: 2px;
+    }
+    .fv-date-box .date-main {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--text-dark);
+    }
+    .fv-date-box .date-sub {
+      font-size: 12px;
+      color: var(--text-mid);
+      margin-top: 2px;
+    }
+    .fv-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .fv-price-row .price-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-mid);
+    }
+    .fv-price-row .price-num {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--coral);
+      line-height: 1;
+    }
+    .fv-price-row .price-unit {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-mid);
+    }
+
+    /* ===== SECTION 2: EMPATHY ===== */
+    .empathy {
+      background: var(--sky-light);
+      padding: 28px 18px;
+    }
+    .empathy-img-wrap { margin-bottom: 18px; }
+    .empathy-img-wrap .placeholder { height: 180px; }
+    .worry-list {
+      list-style: none;
+      margin-bottom: 18px;
+    }
+    .worry-list li {
+      background: var(--white);
+      border-left: 4px solid var(--sky);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .worry-list li .icon { font-size: 18px; flex-shrink: 0; }
+    .solution-box {
+      background: linear-gradient(135deg, var(--sky) 0%, #3ab5d8 100%);
+      color: var(--white);
+      border-radius: 14px;
+      padding: 16px 18px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.6;
+      box-shadow: 0 6px 20px rgba(91,200,232,.4);
+    }
+    .solution-box .solution-sub {
+      font-size: 12px;
+      font-weight: 600;
+      opacity: .9;
+      margin-top: 6px;
+    }
+
+    /* ===== SECTION 3: PROGRAM ===== */
+    .program {
+      background: var(--white);
+      padding: 28px 18px;
+    }
+    .instructor-img-wrap { margin-bottom: 20px; }
+    .instructor-img-wrap .placeholder { height: 160px; }
+    .program-card {
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    }
+    .program-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+    }
+    .program-card-header.money { background: linear-gradient(135deg, #5BC8E8 0%, #3ab5d8 100%); }
+    .program-card-header.health { background: linear-gradient(135deg, #FFD84D 0%, #F5A623 100%); }
+    .program-card-header .part-num {
+      font-size: 11px;
+      font-weight: 900;
+      color: rgba(255,255,255,.9);
+      background: rgba(255,255,255,.25);
+      padding: 3px 9px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .program-card-header.health .part-num { color: rgba(0,0,0,.6); background: rgba(255,255,255,.4); }
+    .program-card-header .part-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.3;
+    }
+    .program-card-header.health .part-title { color: var(--text-dark); }
+    .program-card-body {
+      background: var(--white);
+      padding: 14px 16px;
+    }
+    .program-theme {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .program-theme span { color: var(--coral); }
+    .benefit-list {
+      list-style: none;
+    }
+    .benefit-list li {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-mid);
+      padding: 5px 0;
+      border-bottom: 1px dashed #eee;
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+    }
+    .benefit-list li:last-child { border-bottom: none; }
+    .benefit-list li::before {
+      content: '✓';
+      color: var(--sky);
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .benefit-list.health li::before { color: var(--yellow-dark); }
+    .instructor-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    /* ===== SECTION 4: TOKUTEN ===== */
+    .tokuten {
+      background: var(--yellow-light);
+      padding: 28px 18px;
+    }
+    .tokuten-img-wrap { margin-bottom: 18px; }
+    .tokuten-img-wrap .placeholder { height: 160px; }
+    .gift-box {
+      background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%);
+      border: 2px solid var(--yellow);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .gift-box .gift-icon { font-size: 36px; margin-bottom: 6px; }
+    .gift-box .gift-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    .gift-box .gift-desc {
+      font-size: 13px;
+      color: var(--text-mid);
+    }
+    .anshin-box {
+      background: var(--white);
+      border-left: 4px solid var(--coral);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .anshin-box .shield { font-size: 20px; flex-shrink: 0; }
+    .venue-box {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--text-mid);
+    }
+    .venue-box strong { color: var(--text-dark); font-size: 14px; }
+
+    /* ===== SECTION 5: FINAL CTA ===== */
+    .final-cta {
+      background: linear-gradient(160deg, var(--sky-light) 0%, var(--yellow-light) 100%);
+      padding: 32px 18px 28px;
+      text-align: center;
+    }
+    .scarcity-box {
+      background: var(--coral);
+      color: var(--white);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .scarcity-box .scarcity-icon { font-size: 20px; margin-bottom: 4px; }
+    .final-cta .event-summary {
+      font-size: 12px;
+      color: var(--text-mid);
+      margin-top: 14px;
+      line-height: 1.8;
+    }
+    .final-cta .event-summary strong { color: var(--text-dark); }
+
+    /* ===== DIVIDER ===== */
+    .wave-divider {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      margin-bottom: -2px;
+    }
+    .wave-divider svg { display: block; width: 100%; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255,255,255,.6);
+      text-align: center;
+      font-size: 11px;
+      padding: 16px;
+      line-height: 1.8;
+    }
+    footer a { color: var(--sky-mid); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- ========== FIXED CTA BAR ========== -->
+<div class="fixed-cta">
+  <a href="https://peatix.com/" class="btn-peatix" target="_blank" rel="noopener">
+    🎟 チケットを購入する（Peatixへ）
+    <small>参加費 1,000円 ／ 事前予約制</small>
+  </a>
+</div>
+
+<!-- ========== SECTION 1: FV ========== -->
+<section class="fv">
+  <div class="fv-img-wrap">
+    <div class="placeholder" style="height:280px; border-radius:0;">
+      ★ここにターゲットが惹かれる、明るく笑顔の女性のメイン画像
+    </div>
+    <div class="fv-badge">📣 残席わずか！</div>
+  </div>
+
+  <div class="fv-body">
+    <p class="fv-eyebrow">✦ 30〜50代女性のための1日完結セミナー ✦</p>
+
+    <h1 class="fv-main-copy">
+      10年後の自分を<br>
+      <em>もっと好きになる。</em><br>
+      心・体・お金の<br>「未来投資」セミナー<br>
+      <span style="font-size:18px; color:var(--text-dark);">in 上田</span>
+    </h1>
+
+    <p class="fv-sub-copy">
+      ＼ <strong>美腸 × 資産形成</strong> ／<br>
+      腸から若返り、<strong>未来のお金の不安をゼロ</strong>に！
+    </p>
+
+    <div class="fv-date-box">
+      <p class="date-label">📅 開催日時</p>
+      <p class="date-main">2026年5月30日（土）13:00〜15:30</p>
+      <p class="date-sub">📍 +519worklodge（上田市技術研修センター）</p>
+    </div>
+
+    <div class="fv-price-row">
+      <span class="price-label">参加費</span>
+      <span class="price-num">¥1,000</span>
+      <span class="price-unit">（税込）</span>
+    </div>
+
+    <a href="https://peatix.com/" class="btn-peatix" target="_blank" rel="noopener">
+      🎟 チケットを購入する（Peatixへ）
+      <small>タップしてPeatixのページへ</small>
+    </a>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave-divider">
+  <svg viewBox="0 0 480 30" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,15 C80,30 160,0 240,15 C320,30 400,0 480,15 L480,30 L0,30 Z" fill="#E8F7FC"/>
+  </svg>
+</div>
+
+<!-- ========== SECTION 2: EMPATHY ========== -->
+<section class="empathy">
+  <h2 class="section-title"><span>こんなお悩み、ありませんか？</span></h2>
+
+  <div class="empathy-img-wrap">
+    <div class="placeholder" style="height:180px;">
+      ★ここに悩みを抱える女性のインフォグラフィック調の画像
+    </div>
+  </div>
+
+  <ul class="worry-list">
+    <li><span class="icon">💸</span>老後のお金が漠然と不安…何から始めればいいかわからない</li>
+    <li><span class="icon">😔</span>最近疲れやすい、実年齢より老けて見られる気がする</li>
+    <li><span class="icon">🍽</span>食事に気をつけているつもりなのに、なかなか体が変わらない</li>
+    <li><span class="icon">📉</span>保険や投資の話、難しくて結局何もできていない</li>
+  </ul>
+
+  <div class="solution-box">
+    そのお悩み、<br>
+    体とお金の「プロ」に<strong style="font-size:17px;">1度学ぶだけ</strong>で<br>
+    解決の糸口が見つかります！
+    <p class="solution-sub">難しい知識ゼロ・勧誘なし。安心して参加できます。</p>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave-divider" style="background:#E8F7FC;">
+  <svg viewBox="0 0 480 30" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,15 C80,0 160,30 240,15 C320,0 400,30 480,15 L480,30 L0,30 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+<!-- ========== SECTION 3: PROGRAM ========== -->
+<section class="program">
+  <h2 class="section-title"><span>当日のプログラム</span></h2>
+
+  <div class="instructor-img-wrap">
+    <div class="placeholder" style="height:160px;">
+      ★ここに講師2名（坂口永一・尾美真奈美）の画像
+    </div>
+  </div>
+
+  <!-- 第1部：お金 -->
+  <div class="program-card">
+    <div class="program-card-header money">
+      <span class="part-num">第１部</span>
+      <span class="part-title">お金パート<br>講師：坂口 永一</span>
+    </div>
+    <div class="program-card-body">
+      <p class="program-theme">
+        これだけ学べば<br>
+        <span>未来のお金に困らない！</span><br>
+        資産倍増セミナー
+      </p>
+      <ul class="benefit-list">
+        <li>保険・資産形成の基本を1時間でマスター</li>
+        <li>老後2,000万円問題をスッキリ解消する考え方</li>
+        <li>今すぐできる「お金を増やす」最初の一歩がわかる</li>
+        <li>難しい金融用語なし！女性目線でわかりやすく解説</li>
+      </ul>
+      <p class="instructor-name">保険・資産形成のプロ｜坂口 永一</p>
+    </div>
+  </div>
+
+  <!-- 第2部：健康 -->
+  <div class="program-card">
+    <div class="program-card-header health">
+      <span class="part-num">第２部</span>
+      <span class="part-title">健康パート<br>講師：尾美 真奈美</span>
+    </div>
+    <div class="program-card-body">
+      <p class="program-theme">
+        腸から若返る！<br>
+        <span>見た目年齢 −5歳</span>食事術
+      </p>
+      <ul class="benefit-list health">
+        <li>腸を整えるだけで肌・体型・メンタルが変わる理由</li>
+        <li>スーパーで買える食材で実践できる「美腸レシピ」</li>
+        <li>耳つぼダイエットの最新メソッドを特別公開</li>
+        <li>明日から使える「見た目年齢−5歳」の食習慣</li>
+      </ul>
+      <p class="instructor-name">耳つぼダイエット Believe｜尾美 真奈美</p>
+    </div>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave-divider">
+  <svg viewBox="0 0 480 30" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,15 C80,30 160,0 240,15 C320,30 400,0 480,15 L480,30 L0,30 Z" fill="#FFFBE6"/>
+  </svg>
+</div>
+
+<!-- ========== SECTION 4: TOKUTEN ========== -->
+<section class="tokuten">
+  <h2 class="section-title"><span>参加特典 ＆ 安心ポイント</span></h2>
+
+  <div class="tokuten-img-wrap">
+    <div class="placeholder" style="height:160px;">
+      ★ここにプレゼント・プチギフト（お菓子など）の画像
+    </div>
+  </div>
+
+  <div class="gift-box">
+    <div class="gift-icon">🎁</div>
+    <p class="gift-title">講師からのプチギフトあり♪</p>
+    <p class="gift-desc">参加者全員に、講師達からお土産をご用意しています。<br>お楽しみに！</p>
+  </div>
+
+  <div class="anshin-box">
+    <span class="shield">🛡</span>
+    <span><strong>金融商品の無理な勧誘は一切ありません。</strong><br>安心してご参加ください。</span>
+  </div>
+
+  <div class="venue-box">
+    <strong>📍 会場情報</strong><br>
+    +519worklodge（上田市技術研修センター）<br>
+    <span style="font-size:12px; color:var(--text-light);">長野県上田市 ／ 持ち物：筆記用具</span>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave-divider" style="background:#FFFBE6;">
+  <svg viewBox="0 0 480 30" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,15 C80,0 160,30 240,15 C320,0 400,30 480,15 L480,30 L0,30 Z" fill="#E8F7FC"/>
+  </svg>
+</div>
+
+<!-- ========== SECTION 5: FINAL CTA ========== -->
+<section class="final-cta">
+  <h2 class="section-title"><span>お申し込みはお早めに</span></h2>
+
+  <div class="scarcity-box">
+    <div class="scarcity-icon">⚠️</div>
+    会場の都合上、<strong>お席には限りがあります。</strong><br>
+    満席になり次第、受付終了となります。<br>
+    気になった今すぐお申し込みを！
+  </div>
+
+  <a href="https://peatix.com/" class="btn-peatix" target="_blank" rel="noopener">
+    🎟 チケットを購入する（Peatixへ）
+    <small>参加費 1,000円 ／ タップしてPeatixへ</small>
+  </a>
+
+  <p class="event-summary">
+    <strong>日程：</strong>2026年5月30日（土）13:00〜15:30<br>
+    <strong>会場：</strong>+519worklodge（上田市技術研修センター）<br>
+    <strong>対象：</strong>いつまでも自分らしく輝きたい女性<br>
+    <strong>参加費：</strong>1,000円（事前予約制）<br>
+    <strong>持ち物：</strong>筆記用具
+  </p>
+
+  <p style="margin-top:16px; font-size:12px; color:var(--text-light);">
+    ご不明点は講師へ直接お問い合わせください<br>
+    坂口：000-0000-0000　／　尾美：080-5815-8056
+  </p>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <p>© 2026 心・体・お金の未来投資セミナー in 上田</p>
+  <p style="margin-top:4px;"><a href="https://peatix.com/" target="_blank" rel="noopener">Peatixでチケット購入</a></p>
+</footer>
+
+</body>
+</html>
