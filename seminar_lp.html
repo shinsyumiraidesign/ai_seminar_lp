@@ -5,8 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>心・体・お金の未来投資セミナー in 上田 | 2026年5月30日</title>
   <meta name="description" content="腸から若返り、未来のお金の不安をゼロに。30〜50代女性のための1日完結セミナー。参加費1,000円。2026年5月30日（土）上田市開催。" />
+  <!-- OGP -->
+  <meta property="og:title" content="心・体・お金の未来投資セミナー in 上田" />
+  <meta property="og:description" content="美腸×資産形成。腸から若返り、未来のお金の不安をゼロに！参加費1,000円。2026年5月30日（土）上田市開催。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="images/fv_main.jpg" />
   <style>
-    /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
@@ -16,10 +20,8 @@
       line-height: 1.7;
       max-width: 480px;
       margin: 0 auto;
-      padding-bottom: 80px; /* fixed CTAの分 */
+      padding-bottom: 80px;
     }
-
-    /* ===== COLORS ===== */
     :root {
       --sky: #5BC8E8;
       --sky-light: #E8F7FC;
@@ -32,29 +34,6 @@
       --text-dark: #1a1a2e;
       --text-mid: #444;
       --text-light: #777;
-    }
-
-    /* ===== UTILITY ===== */
-    .tag {
-      display: inline-block;
-      background: var(--yellow);
-      color: var(--text-dark);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .08em;
-      padding: 3px 10px;
-      border-radius: 20px;
-    }
-    .section-title {
-      text-align: center;
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--text-dark);
-      margin-bottom: 16px;
-    }
-    .section-title span {
-      border-bottom: 3px solid var(--yellow);
-      padding-bottom: 2px;
     }
     .btn-peatix {
       display: block;
@@ -73,7 +52,7 @@
       letter-spacing: .04em;
       transition: transform .15s, box-shadow .15s;
     }
-    .btn-peatix:active { transform: scale(.97); box-shadow: 0 3px 10px rgba(245,166,35,.3); }
+    .btn-peatix:active { transform: scale(.97); }
     .btn-peatix small {
       display: block;
       font-size: 11px;
@@ -81,21 +60,16 @@
       margin-top: 3px;
       opacity: .8;
     }
-    .placeholder {
-      width: 100%;
-      background: #e8f4f8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #7ab8cc;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: .05em;
-      border-radius: 12px;
-      overflow: hidden;
+    .section-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 16px;
     }
+    .section-title span { border-bottom: 3px solid var(--yellow); padding-bottom: 2px; }
 
-    /* ===== FIXED CTA BAR ===== */
+    /* FIXED CTA */
     .fixed-cta {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -107,31 +81,45 @@
     }
     .fixed-cta .btn-peatix { font-size: 15px; padding: 14px 12px; }
 
-    /* ===== SECTION 1: FV ===== */
+    /* FV */
     .fv {
       background: linear-gradient(160deg, var(--sky-light) 0%, var(--yellow-light) 100%);
       padding: 0 0 28px;
       position: relative;
       overflow: hidden;
     }
-    .fv::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba(91,200,232,.25) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-    .fv-img-wrap {
+    .fv-img-wrap { width: 100%; position: relative; overflow: hidden; }
+    .fv-img-wrap img {
       width: 100%;
-      height: 280px;
-      position: relative;
-      overflow: hidden;
+      display: block;
+      object-fit: cover;
+      max-height: 520px;
+      object-position: center top;
     }
-    .fv-img-wrap .placeholder { height: 280px; border-radius: 0; font-size: 14px; }
+    .fv-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(26,26,46,.75) 0%, rgba(26,26,46,.05) 100%);
+      padding: 28px 18px 20px;
+    }
+    .fv-overlay .fv-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sky-mid);
+      letter-spacing: .12em;
+      margin-bottom: 8px;
+    }
+    .fv-overlay .fv-main-copy {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.45;
+      text-shadow: 0 2px 8px rgba(0,0,0,.4);
+    }
+    .fv-overlay .fv-main-copy em { font-style: normal; color: var(--yellow); }
     .fv-badge {
       position: absolute;
-      top: 14px; left: 14px;
+      top: 14px; right: 14px;
       background: var(--coral);
       color: #fff;
       font-size: 11px;
@@ -139,29 +127,9 @@
       padding: 5px 12px;
       border-radius: 20px;
       letter-spacing: .06em;
-      box-shadow: 0 3px 10px rgba(255,107,107,.4);
+      box-shadow: 0 3px 10px rgba(255,107,107,.5);
     }
-    .fv-body { padding: 20px 18px 0; }
-    .fv-eyebrow {
-      text-align: center;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--sky);
-      letter-spacing: .12em;
-      margin-bottom: 8px;
-    }
-    .fv-main-copy {
-      text-align: center;
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--text-dark);
-      line-height: 1.45;
-      margin-bottom: 10px;
-    }
-    .fv-main-copy em {
-      font-style: normal;
-      color: var(--sky);
-    }
+    .fv-body { padding: 16px 18px 0; }
     .fv-sub-copy {
       text-align: center;
       font-size: 13px;
@@ -172,7 +140,7 @@
       border-right: 4px solid var(--yellow);
       padding: 8px 12px;
       border-radius: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .fv-sub-copy strong { color: var(--coral); }
     .fv-date-box {
@@ -181,60 +149,19 @@
       border-radius: 12px;
       padding: 10px 14px;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
-    .fv-date-box .date-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--sky);
-      letter-spacing: .1em;
-      margin-bottom: 2px;
-    }
-    .fv-date-box .date-main {
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--text-dark);
-    }
-    .fv-date-box .date-sub {
-      font-size: 12px;
-      color: var(--text-mid);
-      margin-top: 2px;
-    }
-    .fv-price-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-    .fv-price-row .price-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-mid);
-    }
-    .fv-price-row .price-num {
-      font-size: 28px;
-      font-weight: 900;
-      color: var(--coral);
-      line-height: 1;
-    }
-    .fv-price-row .price-unit {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-mid);
-    }
+    .fv-date-box .date-label { font-size: 11px; font-weight: 700; color: var(--sky); letter-spacing: .1em; margin-bottom: 2px; }
+    .fv-date-box .date-main { font-size: 18px; font-weight: 900; color: var(--text-dark); }
+    .fv-date-box .date-sub { font-size: 12px; color: var(--text-mid); margin-top: 2px; }
+    .fv-price-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px; }
+    .fv-price-row .price-label { font-size: 12px; font-weight: 700; color: var(--text-mid); }
+    .fv-price-row .price-num { font-size: 28px; font-weight: 900; color: var(--coral); line-height: 1; }
+    .fv-price-row .price-unit { font-size: 13px; font-weight: 700; color: var(--text-mid); }
 
-    /* ===== SECTION 2: EMPATHY ===== */
-    .empathy {
-      background: var(--sky-light);
-      padding: 28px 18px;
-    }
-    .empathy-img-wrap { margin-bottom: 18px; }
-    .empathy-img-wrap .placeholder { height: 180px; }
-    .worry-list {
-      list-style: none;
-      margin-bottom: 18px;
-    }
+    /* EMPATHY */
+    .empathy { background: var(--sky-light); padding: 28px 18px; }
+    .worry-list { list-style: none; margin-bottom: 18px; }
     .worry-list li {
       background: var(--white);
       border-left: 4px solid var(--sky);
@@ -260,191 +187,75 @@
       line-height: 1.6;
       box-shadow: 0 6px 20px rgba(91,200,232,.4);
     }
-    .solution-box .solution-sub {
-      font-size: 12px;
-      font-weight: 600;
-      opacity: .9;
-      margin-top: 6px;
-    }
+    .solution-box .solution-sub { font-size: 12px; font-weight: 600; opacity: .9; margin-top: 6px; }
 
-    /* ===== SECTION 3: PROGRAM ===== */
-    .program {
-      background: var(--white);
-      padding: 28px 18px;
-    }
-    .instructor-img-wrap { margin-bottom: 20px; }
-    .instructor-img-wrap .placeholder { height: 160px; }
-    .program-card {
-      border-radius: 14px;
+    /* PROGRAM */
+    .program { background: var(--white); padding: 28px 18px; }
+    .instructor-row { display: flex; gap: 14px; margin-bottom: 24px; justify-content: center; }
+    .instructor-card { flex: 1; max-width: 200px; text-align: center; }
+    .instructor-card .avatar-wrap {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
       overflow: hidden;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,.08);
+      border: 3px solid var(--sky-mid);
+      box-shadow: 0 4px 12px rgba(91,200,232,.3);
     }
-    .program-card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-    }
+    .instructor-card.health .avatar-wrap { border-color: var(--yellow); box-shadow: 0 4px 12px rgba(255,216,77,.4); }
+    .instructor-card .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .instructor-card .inst-name { font-size: 15px; font-weight: 900; color: var(--text-dark); margin-bottom: 2px; }
+    .instructor-card .inst-role { font-size: 10px; font-weight: 600; color: var(--text-light); line-height: 1.4; }
+    .instructor-card .inst-tag { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 20px; margin-top: 4px; }
+    .instructor-card.money .inst-tag { background: var(--sky-light); color: var(--sky); }
+    .instructor-card.health .inst-tag { background: var(--yellow-light); color: var(--yellow-dark); }
+    .program-card { border-radius: 14px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+    .program-card-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; }
     .program-card-header.money { background: linear-gradient(135deg, #5BC8E8 0%, #3ab5d8 100%); }
     .program-card-header.health { background: linear-gradient(135deg, #FFD84D 0%, #F5A623 100%); }
-    .program-card-header .part-num {
-      font-size: 11px;
-      font-weight: 900;
-      color: rgba(255,255,255,.9);
-      background: rgba(255,255,255,.25);
-      padding: 3px 9px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
+    .program-card-header .part-num { font-size: 11px; font-weight: 900; color: rgba(255,255,255,.9); background: rgba(255,255,255,.25); padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
     .program-card-header.health .part-num { color: rgba(0,0,0,.6); background: rgba(255,255,255,.4); }
-    .program-card-header .part-title {
-      font-size: 15px;
-      font-weight: 900;
-      color: var(--white);
-      line-height: 1.3;
-    }
+    .program-card-header .part-title { font-size: 15px; font-weight: 900; color: var(--white); line-height: 1.3; }
     .program-card-header.health .part-title { color: var(--text-dark); }
-    .program-card-body {
-      background: var(--white);
-      padding: 14px 16px;
-    }
-    .program-theme {
-      font-size: 16px;
-      font-weight: 900;
-      color: var(--text-dark);
-      margin-bottom: 10px;
-      line-height: 1.4;
-    }
+    .program-card-body { background: var(--white); padding: 14px 16px; }
+    .program-theme { font-size: 16px; font-weight: 900; color: var(--text-dark); margin-bottom: 10px; line-height: 1.4; }
     .program-theme span { color: var(--coral); }
-    .benefit-list {
-      list-style: none;
-    }
-    .benefit-list li {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-mid);
-      padding: 5px 0;
-      border-bottom: 1px dashed #eee;
-      display: flex;
-      align-items: flex-start;
-      gap: 7px;
-    }
+    .benefit-list { list-style: none; }
+    .benefit-list li { font-size: 13px; font-weight: 600; color: var(--text-mid); padding: 5px 0; border-bottom: 1px dashed #eee; display: flex; align-items: flex-start; gap: 7px; }
     .benefit-list li:last-child { border-bottom: none; }
-    .benefit-list li::before {
-      content: '✓';
-      color: var(--sky);
-      font-weight: 900;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
+    .benefit-list li::before { content: '✓'; color: var(--sky); font-weight: 900; flex-shrink: 0; margin-top: 1px; }
     .benefit-list.health li::before { color: var(--yellow-dark); }
-    .instructor-name {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-light);
-      text-align: right;
-      margin-top: 8px;
-    }
 
-    /* ===== SECTION 4: TOKUTEN ===== */
-    .tokuten {
-      background: var(--yellow-light);
-      padding: 28px 18px;
-    }
-    .tokuten-img-wrap { margin-bottom: 18px; }
-    .tokuten-img-wrap .placeholder { height: 160px; }
-    .gift-box {
-      background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%);
-      border: 2px solid var(--yellow);
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
-      margin-bottom: 14px;
-    }
+    /* TOKUTEN */
+    .tokuten { background: var(--yellow-light); padding: 28px 18px; }
+    .gift-box { background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%); border: 2px solid var(--yellow); border-radius: 14px; padding: 16px; text-align: center; margin-bottom: 14px; }
     .gift-box .gift-icon { font-size: 36px; margin-bottom: 6px; }
-    .gift-box .gift-title {
-      font-size: 16px;
-      font-weight: 900;
-      color: var(--text-dark);
-      margin-bottom: 4px;
-    }
-    .gift-box .gift-desc {
-      font-size: 13px;
-      color: var(--text-mid);
-    }
-    .anshin-box {
-      background: var(--white);
-      border-left: 4px solid var(--coral);
-      border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
+    .gift-box .gift-title { font-size: 16px; font-weight: 900; color: var(--text-dark); margin-bottom: 4px; }
+    .gift-box .gift-desc { font-size: 13px; color: var(--text-mid); }
+    .anshin-box { background: var(--white); border-left: 4px solid var(--coral); border-radius: 8px; padding: 12px 14px; font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 14px; display: flex; align-items: flex-start; gap: 8px; }
     .anshin-box .shield { font-size: 20px; flex-shrink: 0; }
-    .venue-box {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 13px;
-      color: var(--text-mid);
-    }
+    .venue-box { background: var(--white); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--text-mid); }
     .venue-box strong { color: var(--text-dark); font-size: 14px; }
 
-    /* ===== SECTION 5: FINAL CTA ===== */
-    .final-cta {
-      background: linear-gradient(160deg, var(--sky-light) 0%, var(--yellow-light) 100%);
-      padding: 32px 18px 28px;
-      text-align: center;
-    }
-    .scarcity-box {
-      background: var(--coral);
-      color: var(--white);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 14px;
-      font-weight: 900;
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
+    /* FINAL CTA */
+    .final-cta { background: linear-gradient(160deg, var(--sky-light) 0%, var(--yellow-light) 100%); padding: 32px 18px 28px; text-align: center; }
+    .scarcity-box { background: var(--coral); color: var(--white); border-radius: 10px; padding: 12px 16px; font-size: 14px; font-weight: 900; margin-bottom: 20px; line-height: 1.6; }
     .scarcity-box .scarcity-icon { font-size: 20px; margin-bottom: 4px; }
-    .final-cta .event-summary {
-      font-size: 12px;
-      color: var(--text-mid);
-      margin-top: 14px;
-      line-height: 1.8;
-    }
+    .final-cta .event-summary { font-size: 12px; color: var(--text-mid); margin-top: 14px; line-height: 1.8; }
     .final-cta .event-summary strong { color: var(--text-dark); }
 
-    /* ===== DIVIDER ===== */
-    .wave-divider {
-      width: 100%;
-      overflow: hidden;
-      line-height: 0;
-      margin-bottom: -2px;
-    }
+    /* WAVE */
+    .wave-divider { width: 100%; overflow: hidden; line-height: 0; margin-bottom: -2px; }
     .wave-divider svg { display: block; width: 100%; }
 
-    /* ===== FOOTER ===== */
-    footer {
-      background: var(--text-dark);
-      color: rgba(255,255,255,.6);
-      text-align: center;
-      font-size: 11px;
-      padding: 16px;
-      line-height: 1.8;
-    }
+    /* FOOTER */
+    footer { background: var(--text-dark); color: rgba(255,255,255,.6); text-align: center; font-size: 11px; padding: 16px; line-height: 1.8; }
     footer a { color: var(--sky-mid); text-decoration: none; }
   </style>
 </head>
 <body>
 
-<!-- ========== FIXED CTA BAR ========== -->
+<!-- FIXED CTA -->
 <div class="fixed-cta">
   <a href="https://peatix.com/" class="btn-peatix" target="_blank" rel="noopener">
     🎟 チケットを購入する（Peatixへ）
@@ -452,42 +263,37 @@
   </a>
 </div>
 
-<!-- ========== SECTION 1: FV ========== -->
+<!-- SECTION 1: FV -->
 <section class="fv">
   <div class="fv-img-wrap">
-    <div class="placeholder" style="height:280px; border-radius:0;">
-      ★ここにターゲットが惹かれる、明るく笑顔の女性のメイン画像
+    <img src="images/fv_main.jpg" alt="明日からもっと輝く私でいるために" loading="eager" />
+    <div class="fv-overlay">
+      <p class="fv-eyebrow">✦ 30〜50代女性のための1日完結セミナー ✦</p>
+      <h1 class="fv-main-copy">
+        10年後の自分を<br>
+        <em>もっと好きになる。</em><br>
+        心・体・お金の<br>「未来投資」セミナー<br>
+        <span style="font-size:16px; color:rgba(255,255,255,.9);">in 上田</span>
+      </h1>
     </div>
     <div class="fv-badge">📣 残席わずか！</div>
   </div>
 
   <div class="fv-body">
-    <p class="fv-eyebrow">✦ 30〜50代女性のための1日完結セミナー ✦</p>
-
-    <h1 class="fv-main-copy">
-      10年後の自分を<br>
-      <em>もっと好きになる。</em><br>
-      心・体・お金の<br>「未来投資」セミナー<br>
-      <span style="font-size:18px; color:var(--text-dark);">in 上田</span>
-    </h1>
-
     <p class="fv-sub-copy">
       ＼ <strong>美腸 × 資産形成</strong> ／<br>
       腸から若返り、<strong>未来のお金の不安をゼロ</strong>に！
     </p>
-
     <div class="fv-date-box">
       <p class="date-label">📅 開催日時</p>
       <p class="date-main">2026年5月30日（土）13:00〜15:30</p>
       <p class="date-sub">📍 +519worklodge（上田市技術研修センター）</p>
     </div>
-
     <div class="fv-price-row">
       <span class="price-label">参加費</span>
       <span class="price-num">¥1,000</span>
       <span class="price-unit">（税込）</span>
     </div>
-
     <a href="https://peatix.com/" class="btn-peatix" target="_blank" rel="noopener">
       🎟 チケットを購入する（Peatixへ）
       <small>タップしてPeatixのページへ</small>
@@ -502,23 +308,15 @@
   </svg>
 </div>
 
-<!-- ========== SECTION 2: EMPATHY ========== -->
+<!-- SECTION 2: EMPATHY -->
 <section class="empathy">
   <h2 class="section-title"><span>こんなお悩み、ありませんか？</span></h2>
-
-  <div class="empathy-img-wrap">
-    <div class="placeholder" style="height:180px;">
-      ★ここに悩みを抱える女性のインフォグラフィック調の画像
-    </div>
-  </div>
-
   <ul class="worry-list">
     <li><span class="icon">💸</span>老後のお金が漠然と不安…何から始めればいいかわからない</li>
     <li><span class="icon">😔</span>最近疲れやすい、実年齢より老けて見られる気がする</li>
     <li><span class="icon">🍽</span>食事に気をつけているつもりなのに、なかなか体が変わらない</li>
     <li><span class="icon">📉</span>保険や投資の話、難しくて結局何もできていない</li>
   </ul>
-
   <div class="solution-box">
     そのお悩み、<br>
     体とお金の「プロ」に<strong style="font-size:17px;">1度学ぶだけ</strong>で<br>
@@ -534,17 +332,31 @@
   </svg>
 </div>
 
-<!-- ========== SECTION 3: PROGRAM ========== -->
+<!-- SECTION 3: PROGRAM & INSTRUCTOR -->
 <section class="program">
-  <h2 class="section-title"><span>当日のプログラム</span></h2>
+  <h2 class="section-title"><span>講師紹介 ＆ プログラム</span></h2>
 
-  <div class="instructor-img-wrap">
-    <div class="placeholder" style="height:160px;">
-      ★ここに講師2名（坂口永一・尾美真奈美）の画像
+  <!-- 講師2名 -->
+  <div class="instructor-row">
+    <div class="instructor-card money">
+      <div class="avatar-wrap">
+        <img src="images/sakaguchi.png" alt="坂口永一" loading="lazy" />
+      </div>
+      <p class="inst-name">坂口 永一</p>
+      <p class="inst-role">保険・資産形成のプロ</p>
+      <span class="inst-tag">💰 お金パート</span>
+    </div>
+    <div class="instructor-card health">
+      <div class="avatar-wrap">
+        <img src="images/omi.png" alt="尾美真奈美" loading="lazy" />
+      </div>
+      <p class="inst-name">尾美 真奈美</p>
+      <p class="inst-role">耳つぼダイエット Believe</p>
+      <span class="inst-tag">🌿 健康パート</span>
     </div>
   </div>
 
-  <!-- 第1部：お金 -->
+  <!-- 第1部 -->
   <div class="program-card">
     <div class="program-card-header money">
       <span class="part-num">第１部</span>
@@ -562,11 +374,10 @@
         <li>今すぐできる「お金を増やす」最初の一歩がわかる</li>
         <li>難しい金融用語なし！女性目線でわかりやすく解説</li>
       </ul>
-      <p class="instructor-name">保険・資産形成のプロ｜坂口 永一</p>
     </div>
   </div>
 
-  <!-- 第2部：健康 -->
+  <!-- 第2部 -->
   <div class="program-card">
     <div class="program-card-header health">
       <span class="part-num">第２部</span>
@@ -583,7 +394,6 @@
         <li>耳つぼダイエットの最新メソッドを特別公開</li>
         <li>明日から使える「見た目年齢−5歳」の食習慣</li>
       </ul>
-      <p class="instructor-name">耳つぼダイエット Believe｜尾美 真奈美</p>
     </div>
   </div>
 </section>
@@ -595,27 +405,18 @@
   </svg>
 </div>
 
-<!-- ========== SECTION 4: TOKUTEN ========== -->
+<!-- SECTION 4: TOKUTEN -->
 <section class="tokuten">
   <h2 class="section-title"><span>参加特典 ＆ 安心ポイント</span></h2>
-
-  <div class="tokuten-img-wrap">
-    <div class="placeholder" style="height:160px;">
-      ★ここにプレゼント・プチギフト（お菓子など）の画像
-    </div>
-  </div>
-
   <div class="gift-box">
     <div class="gift-icon">🎁</div>
     <p class="gift-title">講師からのプチギフトあり♪</p>
     <p class="gift-desc">参加者全員に、講師達からお土産をご用意しています。<br>お楽しみに！</p>
   </div>
-
   <div class="anshin-box">
     <span class="shield">🛡</span>
     <span><strong>金融商品の無理な勧誘は一切ありません。</strong><br>安心してご参加ください。</span>
   </div>
-
   <div class="venue-box">
     <strong>📍 会場情報</strong><br>
     +519worklodge（上田市技術研修センター）<br>
@@ -630,22 +431,19 @@
   </svg>
 </div>
 
-<!-- ========== SECTION 5: FINAL CTA ========== -->
+<!-- SECTION 5: FINAL CTA -->
 <section class="final-cta">
   <h2 class="section-title"><span>お申し込みはお早めに</span></h2>
-
   <div class="scarcity-box">
     <div class="scarcity-icon">⚠️</div>
     会場の都合上、<strong>お席には限りがあります。</strong><br>
     満席になり次第、受付終了となります。<br>
     気になった今すぐお申し込みを！
   </div>
-
   <a href="https://peatix.com/" class="btn-peatix" target="_blank" rel="noopener">
     🎟 チケットを購入する（Peatixへ）
     <small>参加費 1,000円 ／ タップしてPeatixへ</small>
   </a>
-
   <p class="event-summary">
     <strong>日程：</strong>2026年5月30日（土）13:00〜15:30<br>
     <strong>会場：</strong>+519worklodge（上田市技術研修センター）<br>
@@ -653,14 +451,12 @@
     <strong>参加費：</strong>1,000円（事前予約制）<br>
     <strong>持ち物：</strong>筆記用具
   </p>
-
   <p style="margin-top:16px; font-size:12px; color:var(--text-light);">
     ご不明点は講師へ直接お問い合わせください<br>
     坂口：000-0000-0000　／　尾美：080-5815-8056
   </p>
 </section>
 
-<!-- ========== FOOTER ========== -->
 <footer>
   <p>© 2026 心・体・お金の未来投資セミナー in 上田</p>
   <p style="margin-top:4px;"><a href="https://peatix.com/" target="_blank" rel="noopener">Peatixでチケット購入</a></p>
