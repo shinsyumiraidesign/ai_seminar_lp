@@ -289,10 +289,12 @@ export default function FloorPlanApp() {
   };
 
   const addColorIcon = (color: string) => {
-    const pos = snapCenterByEdge(canvasSize.width / 2, canvasSize.height / 2, 18, 18);
+    // デフォルトサイズ = グリッドサイズ（1×1グリッド）
+    const defaultSize = gridSize;
+    const pos = snapCenterByEdge(canvasSize.width / 2, canvasSize.height / 2, defaultSize, defaultSize);
     pushHistory([...shapes, {
       id: newId(), type: 'color', x: pos.x, y: pos.y,
-      color, size: 18, opacity: 0.5, rotation: 0,
+      color, size: defaultSize, opacity: 0.5, rotation: 0,
     } as ColorShape]);
   };
 
@@ -653,32 +655,59 @@ export default function FloorPlanApp() {
   const exportPNG = async () => {
     const svg = canvasRef.current;
     if (!svg) return;
-    const clone = svg.cloneNode(true) as SVGSVGElement;
-    clone.querySelectorAll('.selection-ring').forEach((el) => el.remove());
-    const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    bgRect.setAttribute('width', String(canvasSize.width));
-    bgRect.setAttribute('height', String(canvasSize.height));
-    bgRect.setAttribute('fill', 'white');
-    clone.insertBefore(bgRect, clone.firstChild);
-    const svgString = new XMLSerializer().serializeToString(clone);
-    const url = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml' }));
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = canvasSize.width; canvas.height = canvasSize.height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      ctx.drawImage(img, 0, 0);
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const link = document.createElement('a');
-        link.download = `floor_plan_${Date.now()}.png`;
-        link.href = URL.createObjectURL(blob);
-        link.click();
-        URL.revokeObjectURL(url);
-      }, 'image/png');
+
+    const canvas = document.createElement('canvas');
+    canvas.width = canvasSize.width;
+    canvas.height = canvasSize.height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Step1: 白背景を塗る
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Step2: 背景画像があればCanvasに直接描画（SVGのimage要素はCORSで描画できないため）
+    const drawBgAndSvg = () => {
+      // SVGクローンから<image>要素を除去してSVGのみ描画
+      const clone = svg.cloneNode(true) as SVGSVGElement;
+      clone.querySelectorAll('.selection-ring').forEach((el) => el.remove());
+      // SVG内のimage要素を除去（背景画像はCanvas側で描画済み）
+      clone.querySelectorAll('image').forEach((el) => el.remove());
+      const svgString = new XMLSerializer().serializeToString(clone);
+      const svgUrl = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml' }));
+      const svgImg = new Image();
+      svgImg.onload = () => {
+        ctx.drawImage(svgImg, 0, 0);
+        URL.revokeObjectURL(svgUrl);
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const link = document.createElement('a');
+          link.download = `floor_plan_${Date.now()}.png`;
+          link.href = URL.createObjectURL(blob);
+          link.click();
+        }, 'image/png');
+      };
+      svgImg.src = svgUrl;
     };
-    img.src = url;
+
+    if (bgImage) {
+      // 背景画像をCanvasに先に描画
+      const bgImg = new Image();
+      bgImg.onload = () => {
+        const ratio = Math.min(canvas.width / bgImg.naturalWidth, canvas.height / bgImg.naturalHeight);
+        const imgW = bgImg.naturalWidth * ratio;
+        const imgH = bgImg.naturalHeight * ratio;
+        const imgX = (canvas.width - imgW) / 2;
+        const imgY = (canvas.height - imgH) / 2;
+        ctx.globalAlpha = bgOpacity;
+        ctx.drawImage(bgImg, imgX, imgY, imgW, imgH);
+        ctx.globalAlpha = 1.0;
+        drawBgAndSvg();
+      };
+      bgImg.src = bgImage.src;
+    } else {
+      drawBgAndSvg();
+    }
   };
 
   const exportPDF = () => {
