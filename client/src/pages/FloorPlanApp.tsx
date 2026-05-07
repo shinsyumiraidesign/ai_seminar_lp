@@ -120,6 +120,14 @@ interface LinePreview {
   y2: number;
 }
 
+interface BoxPreview {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  borderStyle: 'none' | 'thin' | 'thick';
+}
+
 // ===== メインコンポーネント =====
 export default function FloorPlanApp() {
   const canvasRef = useRef<SVGSVGElement>(null);
@@ -306,27 +314,49 @@ export default function FloorPlanApp() {
     } as CircleShape]);
   };
 
-  const addBox = (borderStyle: 'none' | 'thin' | 'thick' = 'thin') => {
-    const w = 120, h = 60;
-    const pos = snapCenterByEdge(canvasSize.width / 2, canvasSize.height / 2, w, h);
+  const addBoxFromDrag = (x1: number, y1: number, x2: number, y2: number, borderStyle: 'none' | 'thin' | 'thick') => {
+    const sx1 = snapToGrid ? Math.round(x1 / gridSize) * gridSize : x1;
+    const sy1 = snapToGrid ? Math.round(y1 / gridSize) * gridSize : y1;
+    const sx2 = snapToGrid ? Math.round(x2 / gridSize) * gridSize : x2;
+    const sy2 = snapToGrid ? Math.round(y2 / gridSize) * gridSize : y2;
+    const minW = snapToGrid ? gridSize : 4;
+    const minH = snapToGrid ? gridSize : 4;
+    const w = Math.max(minW, Math.abs(sx2 - sx1));
+    const h = Math.max(minH, Math.abs(sy2 - sy1));
+    const cx = (Math.min(sx1, sx2) + Math.max(sx1, sx2)) / 2;
+    const cy = (Math.min(sy1, sy2) + Math.max(sy1, sy2)) / 2;
     pushHistory([...shapes, {
-      id: newId(), type: 'box', x: pos.x, y: pos.y,
+      id: newId(), type: 'box', x: cx, y: cy,
       width: w, height: h, text: '', borderStyle, rotation: 0,
     } as BoxShape]);
   };
 
   const [drawingTool, setDrawingTool] = useState<string | null>(null);
   const [linePreview, setLinePreview] = useState<LinePreview | null>(null);
+  const [boxPreview, setBoxPreview] = useState<BoxPreview | null>(null);
+  const [boxDragStart, setBoxDragStart] = useState<{ x: number; y: number } | null>(null);
 
   const startLineDrawing = (weight: string) => {
     setDrawingTool(weight === 'thin' ? 'line-thin' : 'line-thick');
     setLinePreview(null);
+    setBoxPreview(null);
+    setBoxDragStart(null);
+    setSelectedId(null);
+  };
+
+  const startBoxDrawing = (borderStyle: 'none' | 'thin' | 'thick') => {
+    setDrawingTool(`box-${borderStyle}`);
+    setLinePreview(null);
+    setBoxPreview(null);
+    setBoxDragStart(null);
     setSelectedId(null);
   };
 
   const cancelDrawing = () => {
     setDrawingTool(null);
     setLinePreview(null);
+    setBoxPreview(null);
+    setBoxDragStart(null);
   };
 
   const rotateSelected = (deltaDegree = 30) => {
@@ -587,6 +617,19 @@ export default function FloorPlanApp() {
     setResizing({ id: shape.id, handle: endpoint, startX: x, startY: y, startShape: { ...shape }, moved: false });
   };
 
+  const handleCanvasMouseDown = (e: React.MouseEvent) => {
+    // 長方形ドラッグ描画の開始
+    if (drawingTool && drawingTool.startsWith('box-')) {
+      e.stopPropagation();
+      const { x, y } = getCanvasCoords(e);
+      const sx = snapToGrid ? Math.round(x / gridSize) * gridSize : x;
+      const sy = snapToGrid ? Math.round(y / gridSize) * gridSize : y;
+      setBoxDragStart({ x: sx, y: sy });
+      const borderStyle = drawingTool.replace('box-', '') as 'none' | 'thin' | 'thick';
+      setBoxPreview({ x1: sx, y1: sy, x2: sx, y2: sy, borderStyle });
+    }
+  };
+
   const handleCanvasClick = (e: React.MouseEvent) => {
     if (drawingTool === 'line-thin' || drawingTool === 'line-thick') {
       const { x, y } = getCanvasCoords(e);
@@ -601,6 +644,8 @@ export default function FloorPlanApp() {
       }
       return;
     }
+    // 長方形モードではclickは使わない（mousedown/upで処理）
+    if (drawingTool && drawingTool.startsWith('box-')) return;
     const target = e.target as SVGElement;
     if (target === canvasRef.current || target.tagName === 'image' || (target.tagName === 'rect' && target.classList.contains('bg-rect'))) {
       setSelectedId(null);
@@ -613,6 +658,26 @@ export default function FloorPlanApp() {
       const sx = snapToGrid ? Math.round(x / gridSize) * gridSize : x;
       const sy = snapToGrid ? Math.round(y / gridSize) * gridSize : y;
       setLinePreview((prev) => prev ? { ...prev, x2: sx, y2: sy } : null);
+    }
+    // 長方形プレビュー更新
+    if (drawingTool && drawingTool.startsWith('box-') && boxDragStart) {
+      const { x, y } = getCanvasCoords(e);
+      const sx = snapToGrid ? Math.round(x / gridSize) * gridSize : x;
+      const sy = snapToGrid ? Math.round(y / gridSize) * gridSize : y;
+      const borderStyle = drawingTool.replace('box-', '') as 'none' | 'thin' | 'thick';
+      setBoxPreview({ x1: boxDragStart.x, y1: boxDragStart.y, x2: sx, y2: sy, borderStyle });
+    }
+  };
+
+  const handleCanvasMouseUp = (e: React.MouseEvent) => {
+    // 長方形ドラッグ描画の確定
+    if (drawingTool && drawingTool.startsWith('box-') && boxDragStart && boxPreview) {
+      const { x, y } = getCanvasCoords(e);
+      const borderStyle = drawingTool.replace('box-', '') as 'none' | 'thin' | 'thick';
+      addBoxFromDrag(boxDragStart.x, boxDragStart.y, x, y, borderStyle);
+      setBoxDragStart(null);
+      setBoxPreview(null);
+      // 連続描画のためツールは維持
     }
   };
 
@@ -973,14 +1038,34 @@ export default function FloorPlanApp() {
             </button>
 
             <SectionTitle>長方形（部屋枠など）</SectionTitle>
-            <div className="grid grid-cols-3 gap-1.5 mb-4">
+            <p className="text-[9px] text-stone-400 mb-1.5">選択→キャンバスでドラッグして配置</p>
+            <div className="grid grid-cols-3 gap-1.5 mb-2">
               {(['none', 'thin', 'thick'] as const).map((style) => (
-                <button key={style} onClick={() => addBox(style)} className="py-3 px-2 bg-white border border-stone-300 rounded-md hover:border-slate-700 hover:bg-stone-50 transition-all flex flex-col items-center gap-1">
-                  <svg width="32" height="18" viewBox="0 0 32 18"><rect x="3" y="3" width="26" height="12" fill="white" stroke={style === 'none' ? 'none' : '#1f2937'} strokeWidth={style === 'thick' ? 2.5 : style === 'thin' ? 1 : 0} /></svg>
+                <button key={style}
+                  onClick={() => startBoxDrawing(style)}
+                  className={`py-3 px-2 rounded-md transition-all flex flex-col items-center gap-1 ${
+                    drawingTool === `box-${style}`
+                      ? 'bg-sky-100 border-2 border-sky-500 text-sky-900'
+                      : 'bg-white border border-stone-300 hover:border-slate-700 hover:bg-stone-50 text-slate-900'
+                  }`}>
+                  <svg width="32" height="18" viewBox="0 0 32 18">
+                    {/* 枠なしは薄いグレー点線で視認性を確保 */}
+                    {style === 'none'
+                      ? <rect x="3" y="3" width="26" height="12" fill="#f8f8f8" stroke="#bbb" strokeWidth="1" strokeDasharray="3,2" />
+                      : <rect x="3" y="3" width="26" height="12" fill="white" stroke="#1f2937" strokeWidth={style === 'thick' ? 2.5 : 1} />
+                    }
+                  </svg>
                   <span className="text-[10px] text-stone-600">{style === 'none' ? '枠なし' : style === 'thin' ? '細い枠' : '太い枠'}</span>
                 </button>
               ))}
             </div>
+            {drawingTool && drawingTool.startsWith('box-') && (
+              <div className="mb-3 p-2 bg-sky-50 border border-sky-200 rounded text-[10px] text-sky-800 leading-relaxed">
+                <p className="font-semibold mb-0.5">📐 長方形描画モード</p>
+                <p>{boxDragStart ? 'ドラッグして大きさを決定' : 'キャンバスでドラッグして配置'}</p>
+                <button onClick={cancelDrawing} className="mt-1 text-[10px] underline hover:text-sky-600">終了 (Esc)</button>
+              </div>
+            )}
 
             <SectionTitle>直線（壁・配線など）</SectionTitle>
             <div className="grid grid-cols-2 gap-1.5 mb-2">
@@ -1062,16 +1147,20 @@ export default function FloorPlanApp() {
         </aside>
 
         <main ref={containerRef} className="flex-1 overflow-hidden bg-stone-200 p-4 relative"
-          onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onMouseUp={(e) => { handleMouseUp(); handleCanvasMouseUp(e); }}
+          onMouseLeave={handleMouseUp}
           onMouseDown={handleContainerMouseDown} onWheel={handleWheel}
-          style={{ cursor: isPanning ? 'grabbing' : (spacePressed ? 'grab' : 'default') }}>
+          style={{ cursor: isPanning ? 'grabbing' : (spacePressed ? 'grab' : (drawingTool ? 'crosshair' : 'default')) }}>
           <div className="absolute inset-0 flex items-center justify-center"
             style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: 'center center', transition: isPanning || dragging ? 'none' : 'transform 0.1s ease-out' }}>
             <div className="bg-white rounded-sm relative"
               style={{ width: canvasSize.width * paperFitScale, height: canvasSize.height * paperFitScale, boxShadow: '0 4px 20px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05)' }}>
               <svg ref={canvasRef} viewBox={`0 0 ${canvasSize.width} ${canvasSize.height}`}
                 className="block w-full h-full" preserveAspectRatio="xMidYMid meet"
-                onClick={handleCanvasClick} onMouseMove={handleCanvasMouseMoveForLine}
+                onClick={handleCanvasClick}
+                onMouseMove={handleCanvasMouseMoveForLine}
+                onMouseDown={handleCanvasMouseDown}
                 style={{ cursor: drawingTool ? 'crosshair' : 'default' }}>
                 <rect className="bg-rect" width={canvasSize.width} height={canvasSize.height} fill="#fefefe" />
                 {bgImage && (() => {
@@ -1101,6 +1190,22 @@ export default function FloorPlanApp() {
                     <circle cx={linePreview.x1} cy={linePreview.y1} r={4} fill="#0ea5e9" />
                   </g>
                 )}
+                {/* 長方形ドラッグプレビュー */}
+                {boxPreview && (() => {
+                  const x = Math.min(boxPreview.x1, boxPreview.x2);
+                  const y = Math.min(boxPreview.y1, boxPreview.y2);
+                  const w = Math.max(1, Math.abs(boxPreview.x2 - boxPreview.x1));
+                  const h = Math.max(1, Math.abs(boxPreview.y2 - boxPreview.y1));
+                  const sw = boxPreview.borderStyle === 'thick' ? 2.8 : boxPreview.borderStyle === 'thin' ? 1.2 : 0;
+                  return (
+                    <g style={{ pointerEvents: 'none' }}>
+                      <rect x={x} y={y} width={w} height={h}
+                        fill="rgba(14,165,233,0.08)" stroke="#0ea5e9"
+                        strokeWidth={Math.max(1, sw)} strokeDasharray="6,3" />
+                      <circle cx={boxPreview.x1} cy={boxPreview.y1} r={4} fill="#0ea5e9" />
+                    </g>
+                  );
+                })()}
               </svg>
             </div>
           </div>
