@@ -147,6 +147,19 @@ export default function FloorPlanApp() {
   const [bgOpacity, setBgOpacity] = useState(1.0);
   const [snapToGrid, setSnapToGrid] = useState(true);
 
+  // exportPNG内で最新値を参照するためのref（useEffectではなく直接更新）
+  const bgImageRef = useRef<BgImage | null>(null);
+  const bgOpacityRef = useRef<number>(1.0);
+  // setBgImageとbgImageRefを同時に更新するラッパー
+  const updateBgImage = (img: BgImage | null) => {
+    bgImageRef.current = img;
+    setBgImage(img);
+  };
+  const updateBgOpacity = (opacity: number) => {
+    bgOpacityRef.current = opacity;
+    setBgOpacity(opacity);
+  };
+
   const [shapes, setShapes] = useState<Shape[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [history, setHistory] = useState<Shape[][]>([]);
@@ -398,7 +411,7 @@ export default function FloorPlanApp() {
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
-        setBgImage({
+        updateBgImage({
           src: ev.target?.result as string,
           naturalWidth: img.naturalWidth,
           naturalHeight: img.naturalHeight,
@@ -721,57 +734,56 @@ export default function FloorPlanApp() {
     const svg = canvasRef.current;
     if (!svg) return;
 
+    const W = canvasSize.width;
+    const H = canvasSize.height;
+
+    // SVGをクローンして選択リングを除去（背景画像のimage要素はそのまま残す）
+    const clone = svg.cloneNode(true) as SVGSVGElement;
+    clone.querySelectorAll('.selection-ring').forEach((el) => el.remove());
+
+    // 白背景を先頭に挿入
+    const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bgRect.setAttribute('width', String(W));
+    bgRect.setAttribute('height', String(H));
+    bgRect.setAttribute('fill', 'white');
+    clone.insertBefore(bgRect, clone.firstChild);
+
+    // SVG全体（背景画像含む）をbase64エンコード
+    const svgData = new XMLSerializer().serializeToString(clone);
+    const svgBase64 = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+
     const canvas = document.createElement('canvas');
-    canvas.width = canvasSize.width;
-    canvas.height = canvasSize.height;
+    canvas.width = W;
+    canvas.height = H;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Step1: 白背景を塗る
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Step2: 背景画像があればCanvasに直接描画（SVGのimage要素はCORSで描画できないため）
-    const drawBgAndSvg = () => {
-      // SVGクローンから<image>要素を除去してSVGのみ描画
-      const clone = svg.cloneNode(true) as SVGSVGElement;
-      clone.querySelectorAll('.selection-ring').forEach((el) => el.remove());
-      // SVG内のimage要素を除去（背景画像はCanvas側で描画済み）
-      clone.querySelectorAll('image').forEach((el) => el.remove());
-      const svgString = new XMLSerializer().serializeToString(clone);
-      const svgUrl = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml' }));
-      const svgImg = new Image();
-      svgImg.onload = () => {
-        ctx.drawImage(svgImg, 0, 0);
-        URL.revokeObjectURL(svgUrl);
-        canvas.toBlob((blob) => {
-          if (!blob) return;
-          const link = document.createElement('a');
-          link.download = `floor_plan_${Date.now()}.png`;
-          link.href = URL.createObjectURL(blob);
-          link.click();
-        }, 'image/png');
+    // SVG全体をCanvasに描画（背景画像はSVG内のimage要素として含む）
+    await new Promise<void>((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, W, H);
+        resolve();
       };
-      svgImg.src = svgUrl;
-    };
-
-    if (bgImage) {
-      // 背景画像をCanvasに先に描画
-      const bgImg = new Image();
-      bgImg.onload = () => {
-        const ratio = Math.min(canvas.width / bgImg.naturalWidth, canvas.height / bgImg.naturalHeight);
-        const imgW = bgImg.naturalWidth * ratio;
-        const imgH = bgImg.naturalHeight * ratio;
-        const imgX = (canvas.width - imgW) / 2;
-        const imgY = (canvas.height - imgH) / 2;
-        ctx.globalAlpha = bgOpacity;
-        ctx.drawImage(bgImg, imgX, imgY, imgW, imgH);
-        ctx.globalAlpha = 1.0;
-        drawBgAndSvg();
+      img.onerror = () => {
+        console.warn('PNG出力: SVGの描画に失敗。白背景のみで出力します。');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, W, H);
+        resolve();
       };
-      bgImg.src = bgImage.src;
-    } else {
-      drawBgAndSvg();
+      img.src = svgBase64;
+    });
+
+    // PNGダウンロード
+    try {
+      const dataUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = `floor_plan_${Date.now()}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('PNG出力エラー:', err);
+      alert('PNG出力に失敗しました。');
     }
   };
 
@@ -805,11 +817,11 @@ export default function FloorPlanApp() {
       try {
         const data = JSON.parse(ev.target?.result as string);
         setPaperSize(data.paperSize || 'a4-landscape');
+        updateBgImage(data.bgImage || null);
         setShapes(data.shapes || []);
         setGridSize(data.gridSize || 25);
         setShowGrid(data.showGrid ?? true);
-        setBgImage(data.bgImage || null);
-        setBgOpacity(data.bgOpacity ?? 1.0);
+        updateBgOpacity(data.bgOpacity ?? 1.0);
         setLabelPrefixes(data.labelPrefixes || ['A', 'B', 'C']);
         setLabelCounters(data.labelCounters || { A: 0, B: 0, C: 0 });
         setLabelLastSize(data.labelLastSize || {});
@@ -979,7 +991,7 @@ export default function FloorPlanApp() {
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
           <ToolButton onClick={() => fileInputRef.current?.click()} icon={<Upload size={15} />} label="背景画像" />
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleBgUpload} />
-          {bgImage && <ToolButton onClick={() => setBgImage(null)} icon={<Trash2 size={15} />} label="背景削除" variant="ghost" />}
+          {bgImage && <ToolButton onClick={() => updateBgImage(null)} icon={<Trash2 size={15} />} label="背景削除" variant="ghost" />}
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
           <ToolButton onClick={() => setShowGrid(!showGrid)} icon={showGrid ? <Eye size={15} /> : <EyeOff size={15} />} label={showGrid ? 'グリッドON' : 'グリッドOFF'} variant="ghost" />
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
@@ -1113,7 +1125,7 @@ export default function FloorPlanApp() {
                   <label className="text-xs text-stone-600 flex justify-between mb-1">
                     <span>背景画像の不透明度</span><span className="font-mono text-stone-900">{Math.round(bgOpacity * 100)}%</span>
                   </label>
-                  <input type="range" min="0" max="100" value={bgOpacity * 100} onChange={(e) => setBgOpacity(Number(e.target.value) / 100)} className="w-full accent-slate-700" />
+                  <input type="range" min="0" max="100" value={bgOpacity * 100} onChange={(e) => updateBgOpacity(Number(e.target.value) / 100)} className="w-full accent-slate-700" />
                 </div>
               )}
               <label className="flex items-center gap-2 text-xs text-stone-700 cursor-pointer">
