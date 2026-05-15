@@ -2,8 +2,15 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   Upload, Trash2, Eye, EyeOff, Download,
-  Image as ImageIcon, Circle, Palette, FileText, RotateCw, Undo2,
+  Image as ImageIcon, Circle, Palette, FileText, RotateCw, Undo2, RefreshCw,
 } from 'lucide-react';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url
+).toString();
 
 // ===== 型定義 =====
 type PaperSizeKey = 'a4-landscape' | 'a4-portrait';
@@ -94,6 +101,8 @@ interface BgImage {
   src: string;
   naturalWidth: number;
   naturalHeight: number;
+  offsetX?: number; // 位置調整X
+  offsetY?: number; // 位置調整Y
 }
 
 interface DragState {
@@ -147,6 +156,27 @@ export default function FloorPlanApp() {
   const [bgOpacity, setBgOpacity] = useState(1.0);
   const [snapToGrid, setSnapToGrid] = useState(true);
 
+  // 背景画像の位置調整
+  const [bgOffsetX, setBgOffsetX] = useState(0);
+  const [bgOffsetY, setBgOffsetY] = useState(0);
+  // 背景画像のドラッグ位置調整状態
+  const [bgDragging, setBgDragging] = useState(false);
+  const [bgDragStart, setBgDragStart] = useState<{ mx: number; my: number; ox: number; oy: number } | null>(null);
+
+  // PDF関連状態
+  const [pdfPages, setPdfPages] = useState(0);
+  const [pdfCurrentPage, setPdfCurrentPage] = useState(1);
+  const [pdfDoc, setPdfDoc] = useState<any>(null);
+  const [showPdfPageSelector, setShowPdfPageSelector] = useState(false);
+
+  // ラベルのパレット内90度回転トグル
+  const [labelRotated, setLabelRotated] = useState<Record<string, boolean>>({}); // prefix -> 回転中か
+
+  // トリミング機能
+  const [trimMode, setTrimMode] = useState(false);
+  const [trimStart, setTrimStart] = useState<{ x: number; y: number } | null>(null);
+  const [trimRect, setTrimRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+
   // exportPNG内で最新値を参照するためのref（useEffectではなく直接更新）
   const bgImageRef = useRef<BgImage | null>(null);
   const bgOpacityRef = useRef<number>(1.0);
@@ -154,6 +184,7 @@ export default function FloorPlanApp() {
   const updateBgImage = (img: BgImage | null) => {
     bgImageRef.current = img;
     setBgImage(img);
+    if (!img) { setBgOffsetX(0); setBgOffsetY(0); }
   };
   const updateBgOpacity = (opacity: number) => {
     bgOpacityRef.current = opacity;
@@ -404,22 +435,124 @@ export default function FloorPlanApp() {
     setSelectedId(null);
   };
 
-  const handleBgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // PDFページをCanvasにレンダリングして背景画像としてセット
+  const renderPdfPage = async (doc: any, pageNum: number) => {
+    const page = await doc.getPage(pageNum);
+    const viewport = page.getViewport({ scale: 2.0 }); // 高解像度でレンダリング
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const ctx = canvas.getContext('2d')!;
+    await page.render({ canvasContext: ctx, viewport }).promise;
+    const dataUrl = canvas.toDataURL('image/png');
+    updateBgImage({ src: dataUrl, naturalWidth: canvas.width, naturalHeight: canvas.height });
+    setBgOffsetX(0);
+    setBgOffsetY(0);
+  };
+
+  const handleBgUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = new Image();
-      img.onload = () => {
-        updateBgImage({
-          src: ev.target?.result as string,
-          naturalWidth: img.naturalWidth,
-          naturalHeight: img.naturalHeight,
-        });
+    // リセット
+    e.target.value = '';
+
+    if (file.type === 'application/pdf') {
+      // PDF処理
+      const arrayBuffer = await file.arrayBuffer();
+      const doc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      setPdfDoc(doc);
+      setPdfPages(doc.numPages);
+      setPdfCurrentPage(1);
+      if (doc.numPages > 1) {
+        setShowPdfPageSelector(true);
+      } else {
+        await renderPdfPage(doc, 1);
+      }
+    } else {
+      // 画像処理（従来通り）
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          updateBgImage({ src: ev.target?.result as string, naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight });
+          setBgOffsetX(0);
+          setBgOffsetY(0);
+        };
+        img.src = ev.target?.result as string;
       };
-      img.src = ev.target?.result as string;
-    };
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // トリミング実行
+  const executeTrim = async () => {
+    if (!bgImage || !trimRect) return;
+    const { x: tx, y: ty, w: tw, h: th } = trimRect;
+    if (tw < 4 || th < 4) { setTrimMode(false); setTrimRect(null); setTrimStart(null); return; }
+
+    // 現在の表示位置から画像内の座標に変換
+    const ratio = Math.min(canvasSize.width / bgImage.naturalWidth, canvasSize.height / bgImage.naturalHeight);
+    const imgW = bgImage.naturalWidth * ratio;
+    const imgH = bgImage.naturalHeight * ratio;
+    const baseX = (canvasSize.width - imgW) / 2 + bgOffsetX;
+    const baseY = (canvasSize.height - imgH) / 2 + bgOffsetY;
+
+    // トリミング矩形を画像内座標に変換
+    const cropX = (tx - baseX) / ratio;
+    const cropY = (ty - baseY) / ratio;
+    const cropW = tw / ratio;
+    const cropH = th / ratio;
+
+    // Canvasで切り抴き
+    const srcCanvas = document.createElement('canvas');
+    srcCanvas.width = bgImage.naturalWidth;
+    srcCanvas.height = bgImage.naturalHeight;
+    const srcCtx = srcCanvas.getContext('2d')!;
+    const img = new Image();
+    await new Promise<void>((resolve) => {
+      img.onload = () => { srcCtx.drawImage(img, 0, 0); resolve(); };
+      img.src = bgImage.src;
+    });
+
+    const dstCanvas = document.createElement('canvas');
+    dstCanvas.width = Math.max(1, Math.round(cropW));
+    dstCanvas.height = Math.max(1, Math.round(cropH));
+    const dstCtx = dstCanvas.getContext('2d')!;
+    dstCtx.drawImage(srcCanvas, Math.round(cropX), Math.round(cropY), Math.round(cropW), Math.round(cropH), 0, 0, dstCanvas.width, dstCanvas.height);
+
+    const dataUrl = dstCanvas.toDataURL('image/png');
+    updateBgImage({ src: dataUrl, naturalWidth: dstCanvas.width, naturalHeight: dstCanvas.height });
+    setBgOffsetX(0);
+    setBgOffsetY(0);
+    setTrimMode(false);
+    setTrimRect(null);
+    setTrimStart(null);
+  };
+
+  // 番号リセット（各系統独立）
+  const resetLabelCounter = (prefix: string) => {
+    setLabelCounters((prev) => ({ ...prev, [prefix]: 0 }));
+  };
+
+  // addLabelの90度回転対応版
+  const addLabelWithRotation = (prefix = 'A') => {
+    const next = (labelCounters[prefix] || 0) + 1;
+    setLabelCounters({ ...labelCounters, [prefix]: next });
+    const colors = getLabelColor(prefix);
+    const lastSize = labelLastSize[prefix];
+    const isRotated = !!labelRotated[prefix];
+    // 回転時は宽高を入れ替え
+    const baseW = lastSize?.width ?? 56;
+    const baseH = lastSize?.height ?? 32;
+    const w = isRotated ? baseH : baseW;
+    const h = isRotated ? baseW : baseH;
+    const pos = snapCenterByEdge(canvasSize.width / 2, canvasSize.height / 2, w, h);
+    pushHistory([...shapes, {
+      id: newId(), type: 'label', x: pos.x, y: pos.y,
+      text: `${prefix}-${next}`, width: w, height: h,
+      rotation: isRotated ? 90 : 0,
+      fillColor: colors.fill, borderColor: colors.border, prefix,
+    } as LabelShape]);
   };
 
   const getCanvasCoords = (e: React.MouseEvent) => {
@@ -544,6 +677,20 @@ export default function FloorPlanApp() {
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    // 背景画像ドラッグ
+    if (bgDragging && bgDragStart) {
+      const svg = canvasRef.current;
+      if (svg) {
+        const rect = svg.getBoundingClientRect();
+        const scaleX = canvasSize.width / rect.width;
+        const scaleY = canvasSize.height / rect.height;
+        const mx = (e.clientX - rect.left) * scaleX;
+        const my = (e.clientY - rect.top) * scaleY;
+        setBgOffsetX(bgDragStart.ox + (mx - bgDragStart.mx));
+        setBgOffsetY(bgDragStart.oy + (my - bgDragStart.my));
+      }
+      return;
+    }
     if (isPanning && panStart) {
       setPan({ x: e.clientX - panStart.x, y: e.clientY - panStart.y });
       return;
@@ -602,6 +749,7 @@ export default function FloorPlanApp() {
   };
 
   const handleMouseUp = () => {
+    if (bgDragging) { setBgDragging(false); setBgDragStart(null); }
     if (isPanning) { setIsPanning(false); setPanStart(null); }
     if (dragging?.moved) setHistory((h) => [...h.slice(-30), shapes]);
     if (resizing?.moved) {
@@ -631,6 +779,14 @@ export default function FloorPlanApp() {
   };
 
   const handleCanvasMouseDown = (e: React.MouseEvent) => {
+    // トリミングモード
+    if (trimMode) {
+      e.stopPropagation();
+      const { x, y } = getCanvasCoords(e);
+      setTrimStart({ x, y });
+      setTrimRect({ x, y, w: 0, h: 0 });
+      return;
+    }
     // 長方形ドラッグ描画の開始
     if (drawingTool && drawingTool.startsWith('box-')) {
       e.stopPropagation();
@@ -666,6 +822,16 @@ export default function FloorPlanApp() {
   };
 
   const handleCanvasMouseMoveForLine = (e: React.MouseEvent) => {
+    // トリミングプレビュー
+    if (trimMode && trimStart) {
+      const { x, y } = getCanvasCoords(e);
+      setTrimRect({
+        x: Math.min(trimStart.x, x),
+        y: Math.min(trimStart.y, y),
+        w: Math.abs(x - trimStart.x),
+        h: Math.abs(y - trimStart.y),
+      });
+    }
     if ((drawingTool === 'line-thin' || drawingTool === 'line-thick') && linePreview) {
       const { x, y } = getCanvasCoords(e);
       const sx = snapToGrid ? Math.round(x / gridSize) * gridSize : x;
@@ -683,6 +849,12 @@ export default function FloorPlanApp() {
   };
 
   const handleCanvasMouseUp = (e: React.MouseEvent) => {
+    // トリミング確定（ドラッグ終了時に自動実行）
+    if (trimMode && trimStart && trimRect && trimRect.w > 4 && trimRect.h > 4) {
+      executeTrim();
+      return;
+    }
+    if (trimMode) { setTrimStart(null); setTrimRect(null); return; }
     // 長方形ドラッグ描画の確定
     if (drawingTool && drawingTool.startsWith('box-') && boxDragStart && boxPreview) {
       const { x, y } = getCanvasCoords(e);
@@ -715,7 +887,11 @@ export default function FloorPlanApp() {
       const tag = (e.target as HTMLElement).tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA') return;
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) { deleteSelected(); }
-      else if (e.key === 'Escape') { if (drawingTool) cancelDrawing(); else setSelectedId(null); }
+      else if (e.key === 'Escape') {
+        if (trimMode) { setTrimMode(false); setTrimRect(null); setTrimStart(null); }
+        else if (drawingTool) cancelDrawing();
+        else setSelectedId(null);
+      }
       else if ((e.metaKey || e.ctrlKey) && e.key === 'z') { e.preventDefault(); undo(); }
       else if ((e.metaKey || e.ctrlKey) && e.key === 'd') { e.preventDefault(); duplicateSelected(); }
       else if ((e.key === 'r' || e.key === 'R') && selectedId && !e.metaKey && !e.ctrlKey) { e.preventDefault(); rotateSelected(e.shiftKey ? -30 : 30); }
@@ -728,7 +904,7 @@ export default function FloorPlanApp() {
     window.addEventListener('keydown', handler);
     window.addEventListener('keyup', upHandler);
     return () => { window.removeEventListener('keydown', handler); window.removeEventListener('keyup', upHandler); };
-  }, [selectedId, editingId, history, shapes, zoom, pan, spacePressed, drawingTool]);
+  }, [selectedId, editingId, history, shapes, zoom, pan, spacePressed, drawingTool, trimMode]);
 
   const exportPNG = async () => {
     const svg = canvasRef.current;
@@ -802,7 +978,7 @@ export default function FloorPlanApp() {
   };
 
   const saveState = () => {
-    const data = { version: 5, paperSize, shapes, gridSize, showGrid, bgImage, bgOpacity, labelPrefixes, labelCounters, labelLastSize, labelCustomColors, arrowCounter };
+    const data = { version: 6, paperSize, shapes, gridSize, showGrid, bgImage, bgOpacity, bgOffsetX, bgOffsetY, labelPrefixes, labelCounters, labelLastSize, labelCustomColors, arrowCounter, labelRotated };
     const link = document.createElement('a');
     link.download = `floor_plan_${Date.now()}.json`;
     link.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
@@ -822,11 +998,14 @@ export default function FloorPlanApp() {
         setGridSize(data.gridSize || 25);
         setShowGrid(data.showGrid ?? true);
         updateBgOpacity(data.bgOpacity ?? 1.0);
+        setBgOffsetX(data.bgOffsetX ?? 0);
+        setBgOffsetY(data.bgOffsetY ?? 0);
         setLabelPrefixes(data.labelPrefixes || ['A', 'B', 'C']);
         setLabelCounters(data.labelCounters || { A: 0, B: 0, C: 0 });
         setLabelLastSize(data.labelLastSize || {});
         setLabelCustomColors(data.labelCustomColors || {});
         setArrowCounter(data.arrowCounter || 0);
+        setLabelRotated(data.labelRotated || {});
         setHistory([]);
         setSelectedId(null);
       } catch (err: any) {
@@ -989,9 +1168,9 @@ export default function FloorPlanApp() {
             ))}
           </div>
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
-          <ToolButton onClick={() => fileInputRef.current?.click()} icon={<Upload size={15} />} label="背景画像" />
-          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleBgUpload} />
-          {bgImage && <ToolButton onClick={() => updateBgImage(null)} icon={<Trash2 size={15} />} label="背景削除" variant="ghost" />}
+          <ToolButton onClick={() => fileInputRef.current?.click()} icon={<Upload size={15} />} label="背景画像/PDF" />
+          <input ref={fileInputRef} type="file" accept="image/*,application/pdf" className="hidden" onChange={handleBgUpload} />
+          {bgImage && <ToolButton onClick={() => { updateBgImage(null); setPdfDoc(null); setPdfPages(0); }} icon={<Trash2 size={15} />} label="背景削除" variant="ghost" />}
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
           <ToolButton onClick={() => setShowGrid(!showGrid)} icon={showGrid ? <Eye size={15} /> : <EyeOff size={15} />} label={showGrid ? 'グリッドON' : 'グリッドOFF'} variant="ghost" />
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
@@ -1017,23 +1196,48 @@ export default function FloorPlanApp() {
                 <p className="text-[10px] font-semibold text-stone-500 uppercase tracking-wider">機器ラベル（自動連番）</p>
                 <p className="text-[9px] text-stone-400">右クリックで色変更</p>
               </div>
-              <div className="grid grid-cols-3 gap-1.5">
+              <div className="space-y-1">
                 {labelPrefixes.map((p) => {
                   const colors = getLabelColor(p);
+                  const isRotated = !!labelRotated[p];
                   return (
-                    <div key={p} className="relative">
-                      <button onClick={() => addLabel(p)}
+                    <div key={p} className="flex items-center gap-1">
+                      {/* メインボタン */}
+                      <button onClick={() => addLabelWithRotation(p)}
                         onContextMenu={(e) => { e.preventDefault(); setColorPickerPrefix(p); }}
-                        className="w-full py-2 px-2 rounded-md hover:scale-105 text-sm font-bold transition-all"
+                        className="flex-1 py-1.5 px-2 rounded-md hover:scale-105 text-sm font-bold transition-all relative"
                         style={{ backgroundColor: colors.fill, border: `1.5px solid ${colors.border}`, color: '#1a1a1a' }}>
-                        {p}-{(labelCounters[p] || 0) + 1}
+                        {isRotated ? (
+                          <span className="flex items-center justify-center gap-1">
+                            <span style={{ display: 'inline-block', transform: 'rotate(90deg)', fontSize: '10px' }}>↕</span>
+                            {p}-{(labelCounters[p] || 0) + 1}
+                          </span>
+                        ) : (
+                          `${p}-${(labelCounters[p] || 0) + 1}`
+                        )}
+                        {!!labelCustomColors[p] && <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-sky-500 border border-white" />}
                       </button>
-                      {!!labelCustomColors[p] && <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-sky-500 border border-white" />}
+                      {/* 90度回転トグル */}
+                      <button
+                        onClick={() => setLabelRotated((prev) => ({ ...prev, [p]: !prev[p] }))}
+                        className={`p-1 rounded text-[10px] transition-all ${isRotated ? 'bg-sky-100 text-sky-700 border border-sky-400' : 'bg-stone-100 text-stone-500 hover:bg-stone-200'}`}
+                        title={isRotated ? '横向きに戻す' : '90度回転して配置'}
+                      >
+                        <RotateCw size={11} />
+                      </button>
+                      {/* 番号リセット */}
+                      <button
+                        onClick={() => resetLabelCounter(p)}
+                        className="p-1 rounded text-[10px] bg-stone-100 text-stone-500 hover:bg-red-100 hover:text-red-600 transition-all"
+                        title={`${p}系の番号を1にリセット`}
+                      >
+                        <RefreshCw size={11} />
+                      </button>
                     </div>
                   );
                 })}
                 {labelPrefixes.length < 26 && (
-                  <button onClick={addLabelPrefix} className="py-2 px-2 bg-white border border-dashed border-stone-400 rounded-md hover:border-slate-700 hover:bg-stone-50 text-sm font-bold text-stone-500 hover:text-slate-900 transition-all">+</button>
+                  <button onClick={addLabelPrefix} className="w-full py-1.5 px-2 bg-white border border-dashed border-stone-400 rounded-md hover:border-slate-700 hover:bg-stone-50 text-sm font-bold text-stone-500 hover:text-slate-900 transition-all">+ 系統追加</button>
                 )}
               </div>
             </div>
@@ -1121,12 +1325,66 @@ export default function FloorPlanApp() {
                 <input type="range" min="10" max="80" value={gridSize} onChange={(e) => setGridSize(Number(e.target.value))} className="w-full accent-slate-700" />
               </div>
               {bgImage && (
-                <div>
-                  <label className="text-xs text-stone-600 flex justify-between mb-1">
-                    <span>背景画像の不透明度</span><span className="font-mono text-stone-900">{Math.round(bgOpacity * 100)}%</span>
-                  </label>
-                  <input type="range" min="0" max="100" value={bgOpacity * 100} onChange={(e) => updateBgOpacity(Number(e.target.value) / 100)} className="w-full accent-slate-700" />
-                </div>
+                <>
+                  <div>
+                    <label className="text-xs text-stone-600 flex justify-between mb-1">
+                      <span>背景画像の不透明度</span><span className="font-mono text-stone-900">{Math.round(bgOpacity * 100)}%</span>
+                    </label>
+                    <input type="range" min="0" max="100" value={bgOpacity * 100} onChange={(e) => updateBgOpacity(Number(e.target.value) / 100)} className="w-full accent-slate-700" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-stone-600 block mb-1">背景画像の位置調整</label>
+                    <p className="text-[9px] text-stone-400 mb-1.5">画像を直接ドラッグで移動できます</p>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <div>
+                        <label className="text-[10px] text-stone-500 block mb-0.5">X移動</label>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => setBgOffsetX((v) => v - 10)} className="px-1.5 py-0.5 text-xs bg-stone-100 hover:bg-stone-200 rounded">-</button>
+                          <input type="number" value={Math.round(bgOffsetX)} onChange={(e) => setBgOffsetX(Number(e.target.value))} className="w-full text-xs text-center border border-stone-300 rounded px-1 py-0.5 font-mono" />
+                          <button onClick={() => setBgOffsetX((v) => v + 10)} className="px-1.5 py-0.5 text-xs bg-stone-100 hover:bg-stone-200 rounded">+</button>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-stone-500 block mb-0.5">Y移動</label>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => setBgOffsetY((v) => v - 10)} className="px-1.5 py-0.5 text-xs bg-stone-100 hover:bg-stone-200 rounded">-</button>
+                          <input type="number" value={Math.round(bgOffsetY)} onChange={(e) => setBgOffsetY(Number(e.target.value))} className="w-full text-xs text-center border border-stone-300 rounded px-1 py-0.5 font-mono" />
+                          <button onClick={() => setBgOffsetY((v) => v + 10)} className="px-1.5 py-0.5 text-xs bg-stone-100 hover:bg-stone-200 rounded">+</button>
+                        </div>
+                      </div>
+                    </div>
+                    <button onClick={() => { setBgOffsetX(0); setBgOffsetY(0); }} className="mt-1.5 w-full py-0.5 text-[10px] text-stone-500 hover:text-slate-900 hover:bg-stone-100 rounded transition-colors">位置をリセット</button>
+                  </div>
+                  <div>
+                    <label className="text-xs text-stone-600 block mb-1">トリミング（切り抴き）</label>
+                    {!trimMode ? (
+                      <button
+                        onClick={() => { setTrimMode(true); setTrimRect(null); setTrimStart(null); }}
+                        className="w-full py-1.5 text-xs bg-amber-50 border border-amber-300 text-amber-800 hover:bg-amber-100 rounded transition-colors"
+                      >
+                        ✂️ トリミングモードに入る
+                      </button>
+                    ) : (
+                      <div className="p-2 bg-amber-50 border border-amber-300 rounded text-[10px] text-amber-800">
+                        <p className="font-semibold mb-0.5">✂️ トリミングモード</p>
+                        <p>ドラッグで範囲を選択→自動切り抴き</p>
+                        <button onClick={() => { setTrimMode(false); setTrimRect(null); setTrimStart(null); }} className="mt-1 text-[10px] underline hover:text-amber-600">キャンセル (Esc)</button>
+                      </div>
+                    )}
+                  </div>
+                  {pdfPages > 1 && (
+                    <div>
+                      <label className="text-xs text-stone-600 flex justify-between mb-1">
+                        <span>PDFページ</span><span className="font-mono text-stone-900">{pdfCurrentPage} / {pdfPages}</span>
+                      </label>
+                      <div className="flex items-center gap-1.5">
+                        <button onClick={() => { const p = Math.max(1, pdfCurrentPage - 1); setPdfCurrentPage(p); renderPdfPage(pdfDoc, p); }} disabled={pdfCurrentPage <= 1} className="px-2 py-1 text-xs bg-stone-100 hover:bg-stone-200 rounded disabled:opacity-40">←</button>
+                        <input type="number" min={1} max={pdfPages} value={pdfCurrentPage} onChange={(e) => { const p = Math.max(1, Math.min(pdfPages, Number(e.target.value))); setPdfCurrentPage(p); renderPdfPage(pdfDoc, p); }} className="flex-1 text-xs text-center border border-stone-300 rounded px-1 py-1 font-mono" />
+                        <button onClick={() => { const p = Math.min(pdfPages, pdfCurrentPage + 1); setPdfCurrentPage(p); renderPdfPage(pdfDoc, p); }} disabled={pdfCurrentPage >= pdfPages} className="px-2 py-1 text-xs bg-stone-100 hover:bg-stone-200 rounded disabled:opacity-40">→</button>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
               <label className="flex items-center gap-2 text-xs text-stone-700 cursor-pointer">
                 <input type="checkbox" checked={snapToGrid} onChange={(e) => setSnapToGrid(e.target.checked)} className="accent-slate-700" />
@@ -1163,7 +1421,7 @@ export default function FloorPlanApp() {
           onMouseUp={(e) => { handleMouseUp(); handleCanvasMouseUp(e); }}
           onMouseLeave={handleMouseUp}
           onMouseDown={handleContainerMouseDown} onWheel={handleWheel}
-          style={{ cursor: isPanning ? 'grabbing' : (spacePressed ? 'grab' : (drawingTool ? 'crosshair' : 'default')) }}>
+          style={{ cursor: isPanning ? 'grabbing' : (spacePressed ? 'grab' : (trimMode ? 'crosshair' : (drawingTool ? 'crosshair' : 'default'))) }}>
           <div className="absolute inset-0 flex items-center justify-center"
             style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: 'center center', transition: isPanning || dragging ? 'none' : 'transform 0.1s ease-out' }}>
             <div className="bg-white rounded-sm relative"
@@ -1178,7 +1436,32 @@ export default function FloorPlanApp() {
                 {bgImage && (() => {
                   const ratio = Math.min(canvasSize.width / bgImage.naturalWidth, canvasSize.height / bgImage.naturalHeight);
                   const imgW = bgImage.naturalWidth * ratio, imgH = bgImage.naturalHeight * ratio;
-                  return <image href={bgImage.src} x={(canvasSize.width-imgW)/2} y={(canvasSize.height-imgH)/2} width={imgW} height={imgH} opacity={bgOpacity} preserveAspectRatio="xMidYMid meet" style={{ pointerEvents: 'none' }} />;
+                  const baseX = (canvasSize.width - imgW) / 2;
+                  const baseY = (canvasSize.height - imgH) / 2;
+                  return (
+                    <image
+                      href={bgImage.src}
+                      x={baseX + bgOffsetX} y={baseY + bgOffsetY}
+                      width={imgW} height={imgH}
+                      opacity={bgOpacity}
+                      preserveAspectRatio="xMidYMid meet"
+                      style={{ pointerEvents: bgDragging ? 'auto' : 'none', cursor: 'move' }}
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                        setBgDragging(true);
+                        const svg = canvasRef.current;
+                        if (!svg) return;
+                        const rect = svg.getBoundingClientRect();
+                        const scaleX = canvasSize.width / rect.width;
+                        const scaleY = canvasSize.height / rect.height;
+                        setBgDragStart({
+                          mx: (e.clientX - rect.left) * scaleX,
+                          my: (e.clientY - rect.top) * scaleY,
+                          ox: bgOffsetX, oy: bgOffsetY
+                        });
+                      }}
+                    />
+                  );
                 })()}
                 {showGrid && (
                   <g style={{ pointerEvents: 'none' }}>
@@ -1200,6 +1483,17 @@ export default function FloorPlanApp() {
                   <g style={{ pointerEvents: 'none' }}>
                     <line x1={linePreview.x1} y1={linePreview.y1} x2={linePreview.x2} y2={linePreview.y2} stroke="#0ea5e9" strokeWidth={drawingTool === 'line-thick' ? 4 : 1.5} strokeLinecap="round" strokeDasharray="4,3" opacity={0.8} />
                     <circle cx={linePreview.x1} cy={linePreview.y1} r={4} fill="#0ea5e9" />
+                  </g>
+                )}
+                {/* トリミング選択プレビュー */}
+                {trimMode && trimRect && trimRect.w > 0 && (
+                  <g style={{ pointerEvents: 'none' }}>
+                    <rect x={trimRect.x} y={trimRect.y} width={trimRect.w} height={trimRect.h}
+                      fill="rgba(14,165,233,0.1)" stroke="#0ea5e9" strokeWidth={2} strokeDasharray="6,3" />
+                    <rect x={0} y={0} width={canvasSize.width} height={canvasSize.height}
+                      fill="rgba(0,0,0,0.3)" style={{ mixBlendMode: 'multiply' } as any}
+                      clipPath={`path('M 0 0 L ${canvasSize.width} 0 L ${canvasSize.width} ${canvasSize.height} L 0 ${canvasSize.height} Z M ${trimRect.x} ${trimRect.y} L ${trimRect.x + trimRect.w} ${trimRect.y} L ${trimRect.x + trimRect.w} ${trimRect.y + trimRect.h} L ${trimRect.x} ${trimRect.y + trimRect.h} Z')`}
+                    />
                   </g>
                 )}
                 {/* 長方形ドラッグプレビュー */}
@@ -1268,6 +1562,26 @@ export default function FloorPlanApp() {
         </div>
         <div className="text-stone-400">v0.5 (Web)</div>
       </footer>
+
+      {/* PDFページ選択モーダル */}
+      {showPdfPageSelector && pdfDoc && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setShowPdfPageSelector(false)}>
+          <div className="bg-white rounded-lg shadow-2xl p-6 w-80" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-sm font-bold text-slate-900 mb-3">PDFページを選択</h3>
+            <p className="text-xs text-stone-500 mb-4">全{pdfPages}ページあります。読み込むページを選択してください。</p>
+            <div className="flex items-center gap-2 mb-4">
+              <button onClick={() => setPdfCurrentPage((p) => Math.max(1, p - 1))} disabled={pdfCurrentPage <= 1} className="px-3 py-1.5 text-sm bg-stone-100 hover:bg-stone-200 rounded disabled:opacity-40">←</button>
+              <input type="number" min={1} max={pdfPages} value={pdfCurrentPage} onChange={(e) => setPdfCurrentPage(Math.max(1, Math.min(pdfPages, Number(e.target.value))))} className="flex-1 text-center border border-stone-300 rounded px-2 py-1.5 text-sm font-mono" />
+              <span className="text-xs text-stone-500">/ {pdfPages}</span>
+              <button onClick={() => setPdfCurrentPage((p) => Math.min(pdfPages, p + 1))} disabled={pdfCurrentPage >= pdfPages} className="px-3 py-1.5 text-sm bg-stone-100 hover:bg-stone-200 rounded disabled:opacity-40">→</button>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setShowPdfPageSelector(false)} className="px-4 py-1.5 text-sm text-stone-600 hover:bg-stone-100 rounded-md">キャンセル</button>
+              <button onClick={async () => { await renderPdfPage(pdfDoc, pdfCurrentPage); setShowPdfPageSelector(false); }} className="px-4 py-1.5 text-sm bg-slate-800 text-white rounded-md hover:bg-slate-900">読み込む</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {editingId && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setEditingId(null)}>
