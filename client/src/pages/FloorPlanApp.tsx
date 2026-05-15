@@ -152,6 +152,7 @@ export default function FloorPlanApp() {
 
   const [gridSize, setGridSize] = useState(25);
   const [showGrid, setShowGrid] = useState(true);
+  const [showBgImage, setShowBgImage] = useState(true); // 背景画像のON/OFF
   const [bgImage, setBgImage] = useState<BgImage | null>(null);
   const [bgOpacity, setBgOpacity] = useState(1.0);
   const [snapToGrid, setSnapToGrid] = useState(true);
@@ -1170,7 +1171,8 @@ export default function FloorPlanApp() {
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
           <ToolButton onClick={() => fileInputRef.current?.click()} icon={<Upload size={15} />} label="背景画像/PDF" />
           <input ref={fileInputRef} type="file" accept="image/*,application/pdf" className="hidden" onChange={handleBgUpload} />
-          {bgImage && <ToolButton onClick={() => { updateBgImage(null); setPdfDoc(null); setPdfPages(0); }} icon={<Trash2 size={15} />} label="背景削除" variant="ghost" />}
+          {bgImage && <ToolButton onClick={() => setShowBgImage(!showBgImage)} icon={showBgImage ? <Eye size={15} /> : <EyeOff size={15} />} label={showBgImage ? '背景表示' : '背景非表示'} variant="ghost" />}
+          {bgImage && <ToolButton onClick={() => { updateBgImage(null); setPdfDoc(null); setPdfPages(0); setShowBgImage(true); }} icon={<Trash2 size={15} />} label="背景削除" variant="ghost" />}
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
           <ToolButton onClick={() => setShowGrid(!showGrid)} icon={showGrid ? <Eye size={15} /> : <EyeOff size={15} />} label={showGrid ? 'グリッドON' : 'グリッドOFF'} variant="ghost" />
           <div className="w-px h-5 bg-stone-300 mx-0.5" />
@@ -1433,7 +1435,7 @@ export default function FloorPlanApp() {
                 onMouseDown={handleCanvasMouseDown}
                 style={{ cursor: drawingTool ? 'crosshair' : 'default' }}>
                 <rect className="bg-rect" width={canvasSize.width} height={canvasSize.height} fill="#fefefe" />
-                {bgImage && (() => {
+                {bgImage && showBgImage && (() => {
                   const ratio = Math.min(canvasSize.width / bgImage.naturalWidth, canvasSize.height / bgImage.naturalHeight);
                   const imgW = bgImage.naturalWidth * ratio, imgH = bgImage.naturalHeight * ratio;
                   const baseX = (canvasSize.width - imgW) / 2;
