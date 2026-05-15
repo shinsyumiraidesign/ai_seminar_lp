@@ -451,22 +451,33 @@ export default function FloorPlanApp() {
     setBgOffsetY(0);
   };
 
-  const handleBgUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.type === 'application/pdf') {
-      // PDF処理
-      const arrayBuffer = await file.arrayBuffer();
-      const doc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      setPdfDoc(doc);
-      setPdfPages(doc.numPages);
-      setPdfCurrentPage(1);
-      if (doc.numPages > 1) {
-        setShowPdfPageSelector(true);
-      } else {
-        await renderPdfPage(doc, 1);
-      }
+    // PDF判定：MIMEタイプまたは拡張子で判定
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+
+    if (isPdf) {
+      // PDF処理（非同期小関数で実行）
+      const processPdf = async () => {
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const doc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          setPdfDoc(doc);
+          setPdfPages(doc.numPages);
+          setPdfCurrentPage(1);
+          if (doc.numPages > 1) {
+            setShowPdfPageSelector(true);
+          } else {
+            await renderPdfPage(doc, 1);
+          }
+        } catch (err: any) {
+          console.error('PDF読み込みエラー:', err);
+          alert('PDFの読み込みに失敗しました。\n' + (err?.message || err));
+        }
+      };
+      processPdf();
     } else {
       // 画像処理（従来通り）
       const reader = new FileReader();
@@ -477,8 +488,10 @@ export default function FloorPlanApp() {
           setBgOffsetX(0);
           setBgOffsetY(0);
         };
+        img.onerror = () => alert('画像の読み込みに失敗しました。');
         img.src = ev.target?.result as string;
       };
+      reader.onerror = () => alert('ファイルの読み込みに失敗しました。');
       reader.readAsDataURL(file);
     }
   };
