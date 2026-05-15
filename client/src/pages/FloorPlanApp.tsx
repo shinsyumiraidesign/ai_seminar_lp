@@ -463,7 +463,16 @@ export default function FloorPlanApp() {
       const processPdf = async () => {
         try {
           const arrayBuffer = await file.arrayBuffer();
-          const doc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          // cMapUrl・standardFontDataUrlを設定してフォント読み込みエラーを回避
+          const pdfBase = new URL('.', import.meta.url).href;
+          const doc = await pdfjsLib.getDocument({
+            data: arrayBuffer,
+            cMapUrl: `${pdfBase}cmaps/`,
+            cMapPacked: true,
+            standardFontDataUrl: `${pdfBase}standard_fonts/`,
+            disableFontFace: false,
+            useSystemFonts: true,
+          }).promise;
           setPdfDoc(doc);
           setPdfPages(doc.numPages);
           setPdfCurrentPage(1);
