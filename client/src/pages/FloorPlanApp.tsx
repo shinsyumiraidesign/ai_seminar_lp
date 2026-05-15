@@ -454,8 +454,6 @@ export default function FloorPlanApp() {
   const handleBgUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // リセット
-    e.target.value = '';
 
     if (file.type === 'application/pdf') {
       // PDF処理
